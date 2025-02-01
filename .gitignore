@@ -1,6 +1,7 @@
 # IDE files
 .idea/
 .vscode/
+*.iml
 
 
 # Compiled and build files
