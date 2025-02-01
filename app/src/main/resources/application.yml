@@ -1,0 +1,19 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+  info:
+    env:
+      enabled: true
+
+# Everything above these dashes will be applied to all profiles
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local, default
+---
