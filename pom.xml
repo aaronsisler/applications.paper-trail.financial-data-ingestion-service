@@ -59,6 +59,7 @@
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>${checkstyle-maven-plugin.version}</version>
                     <configuration>
+                        <excludeGeneratedSources>true</excludeGeneratedSources>
                         <consoleOutput>true</consoleOutput>
                         <violationSeverity>warning</violationSeverity>
                         <failOnViolation>true</failOnViolation>
