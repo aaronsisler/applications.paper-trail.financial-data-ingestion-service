@@ -15,6 +15,11 @@
 
     <properties>
         <start-class>com.ebsolutions.papertrail.financialdataingestionservice.Application</start-class>
+
+        <!-- Versions: Dependencies -->
+        <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+        <openapi-generator-maven-plugin.version>7.11.0</openapi-generator-maven-plugin.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.8.4</springdoc-openapi-starter-webmvc-ui.version>
     </properties>
 
     <dependencyManagement>
@@ -36,6 +41,29 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
+        <!-- Used for POJO annotations within project -->
+        <!-- Version: Spring Parent -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- Used for Swagger UI and Open API annotations -->
+        <!-- Version: Explicit -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+        </dependency>
+
+        <!-- Used for the validation annotations -->
+        <!-- Version: Explicit -->
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>${jackson-databind-nullable.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -51,6 +79,38 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+
+            <!-- Generates Java classes from OpenAPI contracts -->
+            <!-- Version: Explicit -->
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator-maven-plugin.version}</version>
+                <configuration>
+                    <modelPackage>com.ebsolutions.papertrail.financialdataingestionservice.model</modelPackage>
+                    <generatorName>spring</generatorName>
+                    <generateApis>false</generateApis>
+                    <generateSupportingFiles>false</generateSupportingFiles>
+                    <configOptions>
+                        <serializableModel>true</serializableModel>
+                        <useSpringBoot3>true</useSpringBoot3>
+                        <additionalModelTypeAnnotations>
+                            @lombok.Builder
+                        </additionalModelTypeAnnotations>
+                    </configOptions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>models-transaction</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${pom.basedir}/contracts/transactions.yaml</inputSpec>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

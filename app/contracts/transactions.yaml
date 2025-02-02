@@ -1,0 +1,33 @@
+openapi: "3.0.2"
+info:
+  title: Transactions
+  version: "1.0"
+paths:
+  /v1/transactions:
+    post:
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                # 'file' will be the field name in this multipart request
+                file:
+                  type: string
+                  format: binary
+      responses:
+        202:
+          description: ACCEPTED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AcceptedTransaction"
+        '5XX':
+          description: Server Error
+components:
+  schemas:
+    AcceptedTransaction:
+      properties:
+        receiptId:
+          type: string
