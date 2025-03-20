@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -11,7 +11,7 @@
 
     <groupId>com.ebsolutions.papertrail</groupId>
     <artifactId>financial-data-ingestion-service-parent</artifactId>
-    <version>0.1.0</version>
+    <version>${revision}</version>
     <name>financial-data-ingestion-service-parent</name>
     <packaging>pom</packaging>
 
@@ -20,16 +20,84 @@
     </modules>
 
     <properties>
+        <!-- This is the property that is propagated to all children modules -->
+        <revision>0.17.0</revision>
+
         <java.version>21</java.version>
 
         <!-- Versions: Plugins -->
         <checkstyle-maven-plugin.version>3.5.0</checkstyle-maven-plugin.version>
+        <exec-maven-plugin.version>3.5.0</exec-maven-plugin.version>
+        <flatten-maven-plugin.version>1.7.0</flatten-maven-plugin.version>
+        <maven-failsafe-plugin.version>3.5.2</maven-failsafe-plugin.version>
+        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+        <openapi-generator-maven-plugin.version>7.11.0</openapi-generator-maven-plugin.version>
         <spring-boot-maven-plugin.version>3.4.2</spring-boot-maven-plugin.version>
+
+        <!-- Versions: Dependencies -->
+        <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+        <postgresql-driver.version>42.7.5</postgresql-driver.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.8.4</springdoc-openapi-starter-webmvc-ui.version>
+
+        <!-- Versions: Testing Dependencies -->
+        <cucumber-bom.version>7.20.1</cucumber-bom.version>
+        <h2.version>2.3.232</h2.version>
+        <junit-bom.version>5.11.4</junit-bom.version>
+
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- Used for Swagger UI and Open API annotations -->
+            <!-- Version: Explicit -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+            </dependency>
+
+            <!-- Used for the validation annotations -->
+            <!-- Version: Explicit -->
+            <dependency>
+                <groupId>org.openapitools</groupId>
+                <artifactId>jackson-databind-nullable</artifactId>
+                <version>${jackson-databind-nullable.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
+        <plugins>
+            <plugin>
+                <!-- Allows for a single version to be declared in parent pom -->
+                <!-- Version: Parent POM PIM -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+
         <pluginManagement>
             <plugins>
+                <!-- Allows for a single version to be declared in parent pom -->
+                <!-- Version: Explicit -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>${flatten-maven-plugin.version}</version>
+                </plugin>
+                <!-- Used to compile the sources of your project -->
+                <!-- Version: Explicit -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.14.0</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <!-- Using to suppress MockBean warnings -->
+                        <showWarnings>false</showWarnings>
+                    </configuration>
+                </plugin>
                 <!-- Gives the actuator/info API build information -->
                 <!-- Version: Explicit -->
                 <plugin>
@@ -59,8 +127,11 @@
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>${checkstyle-maven-plugin.version}</version>
                     <configuration>
+                        <excludeGeneratedSources>true</excludeGeneratedSources>
                         <consoleOutput>true</consoleOutput>
                         <violationSeverity>warning</violationSeverity>
+                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                        <includeTestResources>true</includeTestResources>
                         <failOnViolation>true</failOnViolation>
                         <failsOnError>true</failsOnError>
                         <configLocation>google_checks.xml</configLocation>
@@ -73,6 +144,57 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+                <!-- Generates Java classes from OpenAPI contracts -->
+                <!-- Version: Explicit -->
+                <plugin>
+                    <groupId>org.openapitools</groupId>
+                    <artifactId>openapi-generator-maven-plugin</artifactId>
+                    <version>${openapi-generator-maven-plugin.version}</version>
+                    <configuration>
+                        <modelPackage>com.ebsolutions.papertrail.financialdataingestionservice.model</modelPackage>
+                        <generatorName>spring</generatorName>
+                        <generateApis>false</generateApis>
+                        <generateSupportingFiles>false</generateSupportingFiles>
+                        <configOptions>
+                            <serializableModel>true</serializableModel>
+                            <!-- This also enabled useJakartaEe-->
+                            <useSpringBoot3>true</useSpringBoot3>
+                            <additionalModelTypeAnnotations>
+                                <!-- Needed for Object Mapper to convert from string to POJO -->
+                                @lombok.AllArgsConstructor
+                                <!-- Needed for Object Mapper to convert from string to POJO -->
+                                @lombok.NoArgsConstructor
+                                <!-- Helpful builder method -->
+                                @lombok.Builder
+                            </additionalModelTypeAnnotations>
+                        </configOptions>
+                    </configuration>
+                </plugin>
+                <!-- Used for running JUnit tests that link to Cucumber feature files -->
+                <!-- Version: Explicit -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                </plugin>
+                <!-- Used for running the Cucumber tests and finding feature files -->
+                <!-- Version: Explicit -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${maven-failsafe-plugin.version}</version>
+                    <configuration>
+                        <testFailureIgnore>true</testFailureIgnore>
+                    </configuration>
+                </plugin>
+                <!-- Used to execute commands on the command line -->
+                <!-- For this case, it spins up a clean docker environment for running tests-->
+                <!-- Version: Explicit -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${exec-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

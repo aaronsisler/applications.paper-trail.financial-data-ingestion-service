@@ -1,0 +1,27 @@
+{
+  "TableName": "SERVICES_EVENTS_ADMIN_SERVICE",
+  "KeySchema": [
+    {
+      "AttributeName": "partitionKey",
+      "KeyType": "HASH"
+    },
+    {
+      "AttributeName": "sortKey",
+      "KeyType": "RANGE"
+    }
+  ],
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "partitionKey",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "sortKey",
+      "AttributeType": "S"
+    }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  }
+}

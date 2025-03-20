@@ -1,0 +1,29 @@
+openapi: 3.0.0
+info:
+  title: Account Transactions REST API
+  version: "1.0"
+servers:
+  - url: http://localhost/
+paths: { }
+components:
+  schemas:
+    AccountTransaction:
+      type: object
+      required:
+        - accountId
+        - amount
+        - description
+      properties:
+        id:
+          type: integer
+        accountId:
+          type: integer
+          minimum: 1
+        amount:
+          type: integer
+          description: Amount in pennies
+          minimum: 1
+        description:
+          type: string
+          minLength: 1
+
