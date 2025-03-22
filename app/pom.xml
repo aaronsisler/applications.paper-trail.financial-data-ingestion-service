@@ -21,10 +21,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- AWS SDK library needed for Database and File Storage access -->
+            <!-- Version: Explicit -->
             <dependency>
-                <groupId>io.awspring.cloud</groupId>
-                <artifactId>spring-cloud-aws</artifactId>
-                <version>3.3.0</version>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>bom</artifactId>
+                <version>${software.amazon.awssdk.bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -33,16 +35,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.awspring.cloud</groupId>
-            <artifactId>spring-cloud-aws-sqs</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.awspring.cloud</groupId>
-            <artifactId>spring-cloud-aws-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.awspring.cloud</groupId>
-            <artifactId>spring-cloud-aws-autoconfigure</artifactId>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>sqs</artifactId>
         </dependency>
         <!-- Contains Spring Boot Starter and Tomcat web server -->
         <!-- Version: Spring Parent -->
