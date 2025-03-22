@@ -1,6 +1,5 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
 
-import com.ebsolutions.papertrail.financialdataingestionservice.common.EventPublisher;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransaction;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +10,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class AccountTransactionService {
-  private final EventPublisher eventPublisher;
+  private final AccountTransactionPublisher accountTransactionPublisher;
 
   public void publishAll(List<AccountTransaction> accountTransactions) {
-    accountTransactions
-        .forEach(accountTransaction -> log.info(accountTransaction.toString()));
-
-    eventPublisher.publish(accountTransactions);
+    accountTransactionPublisher.publish(accountTransactions);
   }
 }

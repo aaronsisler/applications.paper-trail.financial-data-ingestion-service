@@ -16,4 +16,15 @@ spring:
   config:
     activate:
       on-profile: local, default
+
+cloud:
+  aws:
+    sqs:
+      handler:
+        default-deletion-policy: ON_SUCCESS
+
+infrastructure:
+  endpoint: http://localhost:4566
+  messaging:
+    queue-url: ${infrastructure.endpoint}/000000000000/INGESTION_SERVICE_OUTBOUND
 ---
