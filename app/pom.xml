@@ -34,10 +34,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>sqs</artifactId>
-        </dependency>
         <!-- Contains Spring Boot Starter and Tomcat web server -->
         <!-- Version: Spring Parent -->
         <dependency>
@@ -73,8 +69,8 @@
             <artifactId>jackson-databind-nullable</artifactId>
         </dependency>
 
-        <!-- AWS S3 File storage -->
-        <!-- Version: BOM -->
+        <!-- Used for AWS SQS -->
+        <!-- Version: Dep Management -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>sqs</artifactId>
