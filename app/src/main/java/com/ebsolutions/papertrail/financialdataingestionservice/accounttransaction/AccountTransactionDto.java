@@ -1,0 +1,25 @@
+package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
+
+import com.opencsv.bean.CsvBindByPosition;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class AccountTransactionDto {
+  private Integer rowId;
+  @NotBlank(message = "account id cannot be blank")
+  @CsvBindByPosition(position = 0)
+  private String accountId;
+  @NotBlank(message = "amount cannot be blank")
+  @CsvBindByPosition(position = 1)
+  private String amount;
+  @NotBlank(message = "description cannot be blank")
+  @CsvBindByPosition(position = 2)
+  private String description;
+}
