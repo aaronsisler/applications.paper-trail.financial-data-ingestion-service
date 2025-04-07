@@ -1,5 +1,6 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.common;
 
+import com.ebsolutions.papertrail.financialdataingestionservice.common.exceptions.FileValidationException;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.ErrorResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -29,6 +31,51 @@ public class ControllerExceptionHandler {
     log.error("You need to see what exception was actually thrown");
     log.error("Error", exception);
     return ResponseEntity.internalServerError().body(exception);
+  }
+
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "400",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorResponse.class))
+          }),
+  })
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  public ResponseEntity<ErrorResponse> handle(
+      MissingServletRequestParameterException missingServletRequestParameterException) {
+
+    return ResponseEntity.badRequest()
+        .body(
+            ErrorResponse.builder()
+                .messages(Collections.singletonList(
+                    missingServletRequestParameterException.getMessage()))
+                .build()
+        );
+  }
+
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "400",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorResponse.class))
+          }),
+  })
+  @ExceptionHandler(FileValidationException.class)
+  public ResponseEntity<ErrorResponse> handle(FileValidationException fileValidationException) {
+
+    List<String> messages =
+        fileValidationException.errorMessageEnvelopes.stream()
+            .map(errorMessageEnvelope ->
+                "Row " + errorMessageEnvelope.getRowId()
+                    + " :: " + errorMessageEnvelope.getErrorMessage())
+            .toList();
+
+    return ResponseEntity.badRequest()
+        .body(
+            ErrorResponse.builder()
+                .messages(messages)
+                .build()
+        );
   }
 
   @ApiResponses(value = {

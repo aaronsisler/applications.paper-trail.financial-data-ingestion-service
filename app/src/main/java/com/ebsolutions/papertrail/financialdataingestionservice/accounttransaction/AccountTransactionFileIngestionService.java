@@ -8,13 +8,13 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Slf4j
@@ -22,11 +22,14 @@ import org.springframework.web.multipart.MultipartFile;
 public class AccountTransactionFileIngestionService {
   private final AccountTransactionDtoValidator accountTransactionDtoValidator;
 
-  public List<AccountTransaction> process(MultipartFile file) throws IOException {
+  public List<AccountTransaction> process(
+      AccountTransactionFileIngestionEnvelope accountTransactionFileIngestionEnvelope)
+      throws IOException {
 
     List<AccountTransactionDto> accountTransactionDtos;
 
-    try (Reader reader = new InputStreamReader(file.getInputStream())) {
+    try (Reader reader = new InputStreamReader(
+        accountTransactionFileIngestionEnvelope.getFile().getInputStream())) {
       CsvToBean<AccountTransactionDto> cb = new CsvToBeanBuilder<AccountTransactionDto>(reader)
           .withType(AccountTransactionDto.class)
           .build();
@@ -39,9 +42,9 @@ public class AccountTransactionFileIngestionService {
         accountTransactionDtos.stream().map(accountTransactionDto ->
             AccountTransactionDto.builder()
                 .rowId(atomicInteger.incrementAndGet())
-                .accountId(accountTransactionDto.getAccountId())
                 .amount(accountTransactionDto.getAmount())
                 .description(accountTransactionDto.getDescription())
+                .transactionDate(accountTransactionDto.getTransactionDate())
                 .build()).toList();
 
     // Validate each field in the Dto
@@ -57,13 +60,17 @@ public class AccountTransactionFileIngestionService {
       throw new FileValidationException("File has errors", errorMessageEnvelopes);
     }
 
+    // Verify Account id is valid by calling Provider service here
+
     // If no records in the violations list, send back a good request of Account Transactions
     return
         accountTransactionDtos.stream().map(accountTransactionDto ->
-                AccountTransaction.builder()
-                    .accountId(Integer.parseInt(accountTransactionDto.getAccountId()))
-                    .amount(Integer.parseInt(accountTransactionDto.getAmount()))
-                    .description(accountTransactionDto.getDescription()).build())
-            .toList();
+            AccountTransaction.builder()
+                .accountId(accountTransactionFileIngestionEnvelope.getAccountId())
+                .amount(Integer.parseInt(accountTransactionDto.getAmount()))
+                .description(accountTransactionDto.getDescription())
+                .transactionDate(LocalDate.parse(accountTransactionDto.getTransactionDate()))
+                .build()
+        ).toList();
   }
 }

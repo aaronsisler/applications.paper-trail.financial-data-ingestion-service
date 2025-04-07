@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AccountTransactionDto {
   private Integer rowId;
-  @NotBlank(message = "account id cannot be blank")
+  @NotBlank(message = "Amount cannot be blank")
   @CsvBindByPosition(position = 0)
-  private String accountId;
-  @NotBlank(message = "amount cannot be blank")
-  @CsvBindByPosition(position = 1)
   private String amount;
-  @NotBlank(message = "description cannot be blank")
-  @CsvBindByPosition(position = 2)
+  @NotBlank(message = "Description cannot be blank")
+  @CsvBindByPosition(position = 1)
   private String description;
+  @NotBlank(message = "Transaction date cannot be blank")
+  @CsvBindByPosition(position = 2)
+  private String transactionDate;
 }

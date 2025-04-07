@@ -6,4 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class ErrorMessageEnvelope {
+  private int rowId;
+  private String errorMessage;
 }
