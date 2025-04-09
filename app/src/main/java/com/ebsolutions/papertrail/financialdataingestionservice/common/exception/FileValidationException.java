@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataingestionservice.common.exceptions;
+package com.ebsolutions.papertrail.financialdataingestionservice.common.exception;
 
 import com.ebsolutions.papertrail.financialdataingestionservice.common.ErrorMessageEnvelope;
 import java.util.List;

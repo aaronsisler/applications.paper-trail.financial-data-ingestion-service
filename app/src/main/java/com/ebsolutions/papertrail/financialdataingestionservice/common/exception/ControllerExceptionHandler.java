@@ -1,6 +1,5 @@
-package com.ebsolutions.papertrail.financialdataingestionservice.common;
+package com.ebsolutions.papertrail.financialdataingestionservice.common.exception;
 
-import com.ebsolutions.papertrail.financialdataingestionservice.common.exceptions.FileValidationException;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.ErrorResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

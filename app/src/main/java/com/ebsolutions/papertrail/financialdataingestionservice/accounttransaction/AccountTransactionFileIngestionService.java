@@ -1,7 +1,7 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
 
 import com.ebsolutions.papertrail.financialdataingestionservice.common.ErrorMessageEnvelope;
-import com.ebsolutions.papertrail.financialdataingestionservice.common.exceptions.FileValidationException;
+import com.ebsolutions.papertrail.financialdataingestionservice.common.exception.FileValidationException;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransaction;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
