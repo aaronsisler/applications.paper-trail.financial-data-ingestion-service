@@ -1,9 +1,7 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
 
-import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransaction;
-import com.ebsolutions.papertrail.financialdataingestionservice.model.ErrorResponse;
-import java.util.Collections;
-import java.util.List;
+import com.ebsolutions.papertrail.financialdataingestionservice.common.ReceiptUtil;
+import com.ebsolutions.papertrail.financialdataingestionservice.model.ReceiptResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -30,18 +28,15 @@ public class AccountTransactionController {
       @ModelAttribute
       AccountTransactionFileIngestionEnvelope accountTransactionFileIngestionEnvelope)
       throws Exception {
-    if (accountTransactionFileIngestionEnvelope.getFile().isEmpty()) {
-      return ResponseEntity.badRequest()
-          .body(
-              ErrorResponse.builder()
-                  .messages(Collections.singletonList("File is empty"))
-                  .build()
-          );
-    }
 
-    List<AccountTransaction> accountTransactions =
-        accountTransactionFileIngestionService.process(accountTransactionFileIngestionEnvelope);
+    accountTransactionFileIngestionService.process(accountTransactionFileIngestionEnvelope);
 
-    return ResponseEntity.ok().body(accountTransactions);
+    return ResponseEntity
+        .accepted()
+        .body(
+            ReceiptResponse.builder()
+                .receiptId(ReceiptUtil.createReceipt())
+                .build()
+        );
   }
 }

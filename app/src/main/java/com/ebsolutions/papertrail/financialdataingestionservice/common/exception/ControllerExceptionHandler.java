@@ -62,6 +62,15 @@ public class ControllerExceptionHandler {
   @ExceptionHandler(FileValidationException.class)
   public ResponseEntity<ErrorResponse> handle(FileValidationException fileValidationException) {
 
+    if (fileValidationException.errorMessageEnvelopes.isEmpty()) {
+      return ResponseEntity.badRequest()
+          .body(
+              ErrorResponse.builder()
+                  .messages(Collections.singletonList(fileValidationException.getMessage()))
+                  .build()
+          );
+    }
+
     List<String> messages =
         fileValidationException.errorMessageEnvelopes.stream()
             .map(errorMessageEnvelope ->

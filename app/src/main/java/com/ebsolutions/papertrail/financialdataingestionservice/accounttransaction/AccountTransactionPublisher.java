@@ -19,15 +19,12 @@ public class AccountTransactionPublisher {
   private final ObjectMapper objectMapper;
 
   @Value("${infrastructure.messaging.queue-url:`Queue name not found in environment`}")
-  protected String queueUrl;
+  private final String queueUrl;
 
   public void publish(List<AccountTransaction> accountTransactions) {
     try {
       List<String> messages = accountTransactions
           .stream().map(this::process).toList();
-
-      log.info("Publishing messages");
-      log.info(String.valueOf(messages));
 
       List<SendMessageRequest> sendMessageRequests =
           messages.stream().map(message ->

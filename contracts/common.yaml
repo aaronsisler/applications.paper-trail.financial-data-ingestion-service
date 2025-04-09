@@ -7,6 +7,12 @@ servers:
 paths: { }
 components:
   schemas:
+    ReceiptResponse:
+      type: object
+      properties:
+        receiptId:
+          type: string
+          example: "132b108e-ad98-472a-abb0-884f5032f5b8"
     ErrorResponse:
       type: object
       properties:
