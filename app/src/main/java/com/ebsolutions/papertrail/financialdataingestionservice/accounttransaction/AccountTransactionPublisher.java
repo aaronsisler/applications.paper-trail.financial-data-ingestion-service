@@ -1,12 +1,12 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
 
+import com.ebsolutions.papertrail.financialdataingestionservice.common.EventQueue;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransaction;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
@@ -17,9 +17,7 @@ import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 public class AccountTransactionPublisher {
   private final SqsClient sqsClient;
   private final ObjectMapper objectMapper;
-
-  @Value("${infrastructure.messaging.queue-url:`Queue name not found in environment`}")
-  private final String queueUrl;
+  private final EventQueue eventQueue;
 
   public void publish(List<AccountTransaction> accountTransactions) {
     try {
@@ -29,13 +27,14 @@ public class AccountTransactionPublisher {
       List<SendMessageRequest> sendMessageRequests =
           messages.stream().map(message ->
               SendMessageRequest.builder()
-                  .queueUrl(queueUrl)
+                  .queueUrl(eventQueue.getQueueUrl())
                   .messageBody(message)
                   .build()).toList();
 
       sendMessageRequests.forEach(sqsClient::sendMessage);
     } catch (Exception exception) {
       log.error(exception.getMessage());
+      throw exception;
     }
   }
 

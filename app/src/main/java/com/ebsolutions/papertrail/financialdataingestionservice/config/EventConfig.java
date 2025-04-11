@@ -1,5 +1,6 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.config;
 
+import com.ebsolutions.papertrail.financialdataingestionservice.common.EventQueue;
 import java.net.URI;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,13 +16,24 @@ public class EventConfig {
   @Value("${infrastructure.endpoint:`Infrastructure endpoint not found in environment`}")
   protected String endpoint;
 
+  @Value("${infrastructure.messaging.queue-url:`Queue name not found in environment`}")
+  protected String queueUrl;
+
   @Bean
-  @Profile({"local", "default"})
+  @Profile({"local", "default", "dev"})
   public SqsClient localSqsClientInstantiation() {
     return SqsClient.builder()
         .region(Region.US_EAST_1)
         .endpointOverride(URI.create(endpoint))
         .credentialsProvider(staticCredentialsProvider())
+        .build();
+  }
+
+  @Bean
+  @Profile({"local", "default", "dev"})
+  public EventQueue eventQueue() {
+    return EventQueue.builder()
+        .queueUrl(queueUrl)
         .build();
   }
 

@@ -22,3 +22,15 @@ infrastructure:
   messaging:
     queue-url: ${infrastructure.endpoint}/000000000000/INGESTION_SERVICE_OUTBOUND
 
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+infrastructure:
+  endpoint: http://infrastructure:4566
+  messaging:
+    queue-url: ${infrastructure.endpoint}/000000000000/INGESTION_SERVICE_OUTBOUND
+
