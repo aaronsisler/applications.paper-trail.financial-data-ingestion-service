@@ -1,0 +1,19 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+  info:
+    env:
+      enabled: true
+# Used to disable logging during test run
+logging:
+  level:
+    root: OFF
+    org:
+      springframework: OFF
+
+# Everything above these dashes will be applied to all profiles
+---

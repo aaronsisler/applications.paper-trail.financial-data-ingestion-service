@@ -1,0 +1,156 @@
+openapi: 3.0.0
+info:
+  title: Account Transactions REST API
+  version: "1.0"
+servers:
+  - url: http://localhost/
+paths:
+  /account-transactions:
+    get:
+      operationId: getAccountTransactions
+      parameters:
+        - $ref: "#/components/parameters/AccountId"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AccountTransaction"
+        204:
+          description: No content
+    post:
+      operationId: createAccountTransactions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              $ref: "#/components/schemas/AccountTransaction"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/AccountTransaction"
+        4XX:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+    put:
+      operationId: updateAccountTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountTransaction"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountTransaction"
+        4XX:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+  /account-transactions/{accountTransactionId}:
+    parameters:
+      - $ref: "#/components/parameters/AccountTransactionId"
+    delete:
+      operationId: deleteAccountTransaction
+      responses:
+        204:
+          description: No content
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+    get:
+      operationId: getAccountTransaction
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountTransaction"
+        204:
+          description: No content
+        4XX:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    AccountTransaction:
+      type: object
+      required:
+        - accountId
+        - amount
+        - description
+        - transactionDate
+      properties:
+        id:
+          type: integer
+        accountId:
+          type: integer
+          minimum: 1
+        amount:
+          type: integer
+          description: Amount in pennies
+          minimum: 1
+        description:
+          type: string
+          minLength: 1
+        transactionDate:
+          type: string
+          format: local-date
+          example: "2025-04-13"
+  parameters:
+    AccountId:
+      in: query
+      name: accountId
+      required: false
+      schema:
+        type: integer
+    AccountTransactionId:
+      in: path
+      name: accountTransactionId
+      required: true
+      schema:
+        type: integer
+
