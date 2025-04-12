@@ -1,5 +1,6 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.tooling;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,6 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 @CucumberContextConfiguration
 public class BaseTest {
+  protected final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
+
   @Autowired
   protected MockMvc mockMvc;
 
