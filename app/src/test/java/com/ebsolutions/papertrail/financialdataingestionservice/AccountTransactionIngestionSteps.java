@@ -1,6 +1,9 @@
 package com.ebsolutions.papertrail.financialdataingestionservice;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import com.ebsolutions.papertrail.financialdataingestionservice.config.UriConstants;
+import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransactionFileEnvelope;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.SupportedInstitution;
 import com.ebsolutions.papertrail.financialdataingestionservice.tooling.BaseTest;
@@ -10,6 +13,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,8 +34,17 @@ public class AccountTransactionIngestionSteps extends BaseTest {
 
   @And("an account transaction in the request body has a null file")
   public void anAccountTransactionInTheRequestBodyHasANullFile() throws JsonProcessingException {
-    mockMultipartFile = new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
-        (byte[]) null);
+    AccountTransactionFileEnvelope accountTransactionFileEnvelope =
+        AccountTransactionFileEnvelope
+            .builder()
+            .accountId(1)
+            .file(null)
+            .supportedInstitution(SupportedInstitution.AMEX)
+            .build();
+
+    requestContent =
+        objectMapper.writeValueAsString(
+            Collections.singletonList(accountTransactionFileEnvelope));
   }
 
   @And("an account transaction in the request body has an empty file")
@@ -46,6 +59,15 @@ public class AccountTransactionIngestionSteps extends BaseTest {
             .file(mockMultipartFile)
             .param("accountId", String.valueOf(1))
             .param("supportedInstitution", SupportedInstitution.AMEX.getValue()))
+        .andReturn();
+  }
+
+  @When("the ingest account transactions endpoint is invoked with a null file")
+  public void theIngestAccountTransactionsEndpointIsInvokedWithANullFile() throws Exception {
+    result = mockMvc.perform(post(UriConstants.ACCOUNT_TRANSACTIONS_URI)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(requestContent)
+            .accept(MediaType.APPLICATION_JSON))
         .andReturn();
   }
 

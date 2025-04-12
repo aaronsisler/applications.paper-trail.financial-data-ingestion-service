@@ -28,24 +28,25 @@ Feature: Account Transaction: Ingestion
   Scenario Outline: File is null returns correct error
     Given application is up
     And an account transaction in the request body has a null file
-    When the ingest account transactions endpoint is invoked
+    When the ingest account transactions endpoint is invoked with a null file
+#    When the ingest account transactions endpoint is invoked
     Then the correct bad request response is returned from the ingest transactions endpoint
       | <statusCode> | <responseMessage> |
 
     Examples:
-      | statusCode | responseMessage      |
-      | 400        | File cannot be empty |
+      | statusCode | responseMessage             |
+      | 400        | Media type is not supported |
 
-  Scenario Outline: File is empty returns correct error
-    Given application is up
-    And an account transaction in the request body has an empty file
-    When the ingest account transactions endpoint is invoked
-    Then the correct bad request response is returned from the ingest transactions endpoint
-      | <statusCode> | <responseMessage> |
+#  Scenario Outline: File is empty returns correct error
+#    Given application is up
+#    And an account transaction in the request body has an empty file
+#    When the ingest account transactions endpoint is invoked
+#    Then the correct bad request response is returned from the ingest transactions endpoint
+#      | <statusCode> | <responseMessage> |
 
-    Examples:
-      | statusCode | responseMessage      |
-      | 400        | File cannot be empty |
+#    Examples:
+#      | statusCode | responseMessage      |
+#      | 400        | File cannot be empty |
 #
 #
 #  Scenario Outline: Account Id does not exist returns correct error

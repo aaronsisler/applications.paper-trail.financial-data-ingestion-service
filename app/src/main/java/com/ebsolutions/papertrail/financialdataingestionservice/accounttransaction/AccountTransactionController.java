@@ -26,9 +26,6 @@ public class AccountTransactionController {
   )
   public ResponseEntity<?> loadFile(
       @ModelAttribute AccountTransactionFileEnvelope accountTransactionFileEnvelope) {
-
-    System.out.println(accountTransactionFileEnvelope.getFile());
-
     if (accountTransactionFileEnvelope.getFile() == null) {
       return ResponseEntity
           .badRequest()
