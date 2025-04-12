@@ -1,6 +1,8 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
 
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransactionFileEnvelope;
+import com.ebsolutions.papertrail.financialdataingestionservice.model.ErrorResponse;
+import java.util.Collections;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -24,6 +26,24 @@ public class AccountTransactionController {
   )
   public ResponseEntity<?> loadFile(
       @ModelAttribute AccountTransactionFileEnvelope accountTransactionFileEnvelope) {
+
+    System.out.println(accountTransactionFileEnvelope.getFile());
+
+    if (accountTransactionFileEnvelope.getFile() == null) {
+      return ResponseEntity
+          .badRequest()
+          .body(ErrorResponse.builder()
+              .messages(Collections.singletonList("File cannot be null"))
+              .build());
+    }
+
+    if (accountTransactionFileEnvelope.getFile().isEmpty()) {
+      return ResponseEntity
+          .badRequest()
+          .body(ErrorResponse.builder()
+              .messages(Collections.singletonList("File cannot be empty"))
+              .build());
+    }
 
 
     return ResponseEntity

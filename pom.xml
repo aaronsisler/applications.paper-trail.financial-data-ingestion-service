@@ -185,12 +185,12 @@
                             <serializableModel>true</serializableModel>
                             <!-- This also enabled useJakartaEe-->
                             <useSpringBoot3>true</useSpringBoot3>
-                            <!--                            <additionalModelTypeAnnotations>-->
-                            <!--                                @lombok.AllArgsConstructor-->
-                            <!--                                @lombok.RequiredArgsConstructor-->
-                            <!--                                @lombok.NoArgsConstructor-->
-                            <!--                                @lombok.Builder-->
-                            <!--                            </additionalModelTypeAnnotations>-->
+                            <additionalModelTypeAnnotations>
+                                @lombok.Builder
+                                <!--                                @lombok.AllArgsConstructor-->
+                                <!--                                @lombok.RequiredArgsConstructor-->
+                                <!--                                @lombok.NoArgsConstructor-->
+                            </additionalModelTypeAnnotations>
 
                         </configOptions>
                     </configuration>
