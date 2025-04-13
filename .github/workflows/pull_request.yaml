@@ -20,12 +20,7 @@ jobs:
           cache: "maven"
 
       - name: Build Application
-        run: mvn clean install
-
-      - name: Run Sonar Scan
-        run: mvn sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=aaronsisler_applications.paper-trail.financial-data-ingestion-service
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_AUTH_KEY }}
+        run: mvn clean install --no-transfer-progress
 
       - name: Build and analyze
         env:
