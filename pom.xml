@@ -21,7 +21,7 @@
 
     <properties>
         <!-- This is the property that is propagated to all children modules -->
-        <revision>0.2.0</revision>
+        <revision>0.3.0</revision>
 
         <java.version>21</java.version>
 
@@ -91,6 +91,13 @@
 
         <pluginManagement>
             <plugins>
+                <!-- Allows for a single version to be declared in parent pom -->
+                <!-- Version: Explicit -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>${flatten-maven-plugin.version}</version>
+                </plugin>
                 <!-- Used to compile the sources of your project -->
                 <!-- Version: Explicit -->
                 <plugin>
@@ -158,7 +165,7 @@
                     <artifactId>openapi-generator-maven-plugin</artifactId>
                     <version>${openapi-generator-maven-plugin.version}</version>
                     <configuration>
-                        <modelPackage>com.ebsolutions.papertrail.financialdataproviderservice.model</modelPackage>
+                        <modelPackage>com.ebsolutions.papertrail.financialdataingestionservice.model</modelPackage>
                         <generatorName>spring</generatorName>
                         <generateApis>false</generateApis>
                         <generateSupportingFiles>false</generateSupportingFiles>
@@ -166,22 +173,19 @@
                         <typeMappings>
                             <!-- Kebab format is the format for custom mappings  -->
                             <typeMapping>local-date=LocalDate</typeMapping>
+                            <typeMapping>csv-file=MultipartFile</typeMapping>
                         </typeMappings>
                         <!-- importMappings then links the typeMapping (left side) to a Java import (right side) -->
                         <importMappings>
                             <!-- Left side in importMappings maps to the right side in typeMappings -->
                             <importMapping>LocalDate=java.time.LocalDate</importMapping>
+                            <importMapping>MultipartFile=org.springframework.web.multipart.MultipartFile</importMapping>
                         </importMappings>
                         <configOptions>
                             <serializableModel>true</serializableModel>
                             <!-- This also enabled useJakartaEe-->
                             <useSpringBoot3>true</useSpringBoot3>
                             <additionalModelTypeAnnotations>
-                                <!-- Needed for Object Mapper to convert from string to POJO -->
-                                @lombok.AllArgsConstructor
-                                <!-- Needed for Object Mapper to convert from string to POJO -->
-                                @lombok.NoArgsConstructor
-                                <!-- Helpful builder method -->
                                 @lombok.Builder
                             </additionalModelTypeAnnotations>
 
@@ -203,42 +207,6 @@
                     <version>${maven-failsafe-plugin.version}</version>
                     <configuration>
                         <testFailureIgnore>true</testFailureIgnore>
-                    </configuration>
-                </plugin>
-                <!-- Generates Java classes from OpenAPI contracts -->
-                <!-- Version: Explicit -->
-                <plugin>
-                    <groupId>org.openapitools</groupId>
-                    <artifactId>openapi-generator-maven-plugin</artifactId>
-                    <version>${openapi-generator-maven-plugin.version}</version>
-                    <configuration>
-                        <modelPackage>com.ebsolutions.papertrail.financialdataproviderservice.model</modelPackage>
-                        <generatorName>spring</generatorName>
-                        <generateApis>false</generateApis>
-                        <generateSupportingFiles>false</generateSupportingFiles>
-                        <!-- typeMappings links the contract (left side) to the right side -->
-                        <typeMappings>
-                            <!-- Kebab format is the format for custom mappings  -->
-                            <typeMapping>local-date=LocalDate</typeMapping>
-                        </typeMappings>
-                        <!-- importMappings then links the typeMapping (left side) to a Java import (right side) -->
-                        <importMappings>
-                            <!-- Left side in importMappings maps to the right side in typeMappings -->
-                            <importMapping>LocalDate=java.time.LocalDate</importMapping>
-                        </importMappings>
-                        <configOptions>
-                            <serializableModel>true</serializableModel>
-                            <!-- This also enabled useJakartaEe-->
-                            <useSpringBoot3>true</useSpringBoot3>
-                            <additionalModelTypeAnnotations>
-                                <!-- Needed for Object Mapper to convert from string to POJO -->
-                                @lombok.AllArgsConstructor
-                                <!-- Needed for Object Mapper to convert from string to POJO -->
-                                @lombok.NoArgsConstructor
-                                <!-- Helpful builder method -->
-                                @lombok.Builder
-                            </additionalModelTypeAnnotations>
-                        </configOptions>
                     </configuration>
                 </plugin>
             </plugins>

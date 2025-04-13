@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.3.0] Ingest Account Transaction
+
+### Added
+
+- Adding in Account Transaction controller for ingestion
+
 ## [0.2.0] Cucumber Base
 
 ### Added
