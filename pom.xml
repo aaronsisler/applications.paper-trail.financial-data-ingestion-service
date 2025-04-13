@@ -188,7 +188,7 @@
                             <additionalModelTypeAnnotations>
                                 <!-- Needed for Object Mapper to convert from string to POJO -->
                                 <!--                                @lombok.AllArgsConstructor-->
-                                @lombok.RequiredArgsConstructor
+                                <!--                                @lombok.RequiredArgsConstructor-->
                                 <!-- Needed for Object Mapper to convert from string to POJO -->
                                 <!--                                @lombok.NoArgsConstructor-->
                                 @lombok.Builder
