@@ -27,10 +27,24 @@ public class AccountTransactionIngestionSteps extends BaseTest {
   private MvcResult result;
   private MockMultipartFile mockMultipartFile;
   private String accountId;
+  private String supportedInstitution;
 
   @And("an account transaction in the request body has an invalid institution")
-  public void anAccountTransactionInTheRequestBodyHasAnInvalidInstitution() {
+  public void anAccountTransactionInTheRequestBodyHasAnInvalidInstitution()
+      throws JsonProcessingException {
+    AccountTransactionFileEnvelope accountTransactionFileEnvelope =
+        AccountTransactionFileEnvelope
+            .builder()
+            .accountId(1)
+            .file(null)
+            .supportedInstitution(SupportedInstitution.AMEX)
+            .build();
 
+    requestContent =
+        objectMapper.writeValueAsString(
+            Collections.singletonList(accountTransactionFileEnvelope));
+
+    System.out.println(requestContent);
   }
 
   @And("an account transaction in the request body has a null file")
@@ -61,9 +75,24 @@ public class AccountTransactionIngestionSteps extends BaseTest {
             "non-empty-file".getBytes());
   }
 
+  @And("the account id in the account transaction is valid")
+  public void theAccountIdInTheAccountTransactionIsValid() {
+    accountId = "1";
+  }
+
   @And("an account transaction in the request body has an invalid account id")
   public void anAccountTransactionInTheRequestBodyHasAnInvalidAccountId(DataTable dataTable) {
     accountId = dataTable.column(0).getFirst();
+  }
+
+  @And("the supported institution in the account transaction is valid")
+  public void theSupportedInstitutionInTheAccountTransactionIsValid() {
+    supportedInstitution = SupportedInstitution.AMEX.getValue();
+  }
+
+  @And("the supported institution in the account transaction is not valid")
+  public void theSupportedInstitutionInTheAccountTransactionIsNotValid() {
+    supportedInstitution = "NOT_VALID";
   }
 
   @When("the ingest account transactions endpoint is invoked")
@@ -71,16 +100,7 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     result = mockMvc.perform(MockMvcRequestBuilders.multipart(UriConstants.ACCOUNT_TRANSACTIONS_URI)
             .file(mockMultipartFile)
             .param("accountId", accountId)
-            .param("supportedInstitution", SupportedInstitution.AMEX.getValue()))
-        .andReturn();
-  }
-
-  @When("the ingest account transactions endpoint is invoked with a null file")
-  public void theIngestAccountTransactionsEndpointIsInvokedWithANullFile() throws Exception {
-    result = mockMvc.perform(post(UriConstants.ACCOUNT_TRANSACTIONS_URI)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(requestContent)
-            .accept(MediaType.APPLICATION_JSON))
+            .param("supportedInstitution", supportedInstitution))
         .andReturn();
   }
 
@@ -101,5 +121,14 @@ public class AccountTransactionIngestionSteps extends BaseTest {
 
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
     Assertions.assertEquals(dataTable.column(1).getFirst(), errorResponse.getMessages().getFirst());
+  }
+
+  @When("the ingest account transactions endpoint is invoked with a null file")
+  public void theIngestAccountTransactionsEndpointIsInvokedWithANullFile() throws Exception {
+    result = mockMvc.perform(post(UriConstants.ACCOUNT_TRANSACTIONS_URI)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(requestContent)
+            .accept(MediaType.APPLICATION_JSON))
+        .andReturn();
   }
 }
