@@ -27,4 +27,12 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_AUTH_KEY }}
 
-#        SONAR_AUTH_KEY
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+
+#      - name: SonarQubeScan
+#        uses: SonarSource/sonarqube-scan-action@v4
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
