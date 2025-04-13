@@ -25,6 +25,6 @@ jobs:
       - name: Run Sonar Scan
         run: mvn sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=aaronsisler_applications.paper-trail.financial-data-ingestion-service
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_AUTH_KEY }}
 
 #        SONAR_AUTH_KEY
