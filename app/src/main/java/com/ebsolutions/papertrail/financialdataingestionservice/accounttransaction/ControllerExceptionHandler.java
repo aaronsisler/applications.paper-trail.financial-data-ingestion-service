@@ -30,7 +30,7 @@ public class ControllerExceptionHandler {
           }),
   })
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorResponse> handle(
+  public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
       MethodArgumentNotValidException methodArgumentNotValidException) {
 
     if (methodArgumentNotValidException.getFieldError() != null) {
@@ -67,11 +67,24 @@ public class ControllerExceptionHandler {
    * @return custom response with descriptive error messages
    */
   @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-  public ResponseEntity<ErrorResponse> handleException(
+  public ResponseEntity<ErrorResponse> handleHttpMediaTypeNotSupportedException(
       HttpMediaTypeNotSupportedException httpMediaTypeNotSupportedException) {
 
     return ResponseEntity.badRequest().body(ErrorResponse.builder()
         .messages(Collections.singletonList("Media type is not supported"))
+        .build());
+  }
+
+  /**
+   * @param accountTransactionFileException caught in controller as thrown from service
+   * @return custom response with descriptive error messages
+   */
+  @ExceptionHandler(AccountTransactionFileException.class)
+  public ResponseEntity<ErrorResponse> handleAccountTransactionFileException(
+      AccountTransactionFileException accountTransactionFileException) {
+
+    return ResponseEntity.badRequest().body(ErrorResponse.builder()
+        .messages(Collections.singletonList(accountTransactionFileException.getMessage()))
         .build());
   }
 
