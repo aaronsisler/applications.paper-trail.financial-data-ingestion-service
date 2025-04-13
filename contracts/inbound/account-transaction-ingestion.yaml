@@ -31,4 +31,3 @@ components:
           format: csv-file
         supportedInstitution:
           $ref: "#/components/schemas/SupportedInstitution"
-

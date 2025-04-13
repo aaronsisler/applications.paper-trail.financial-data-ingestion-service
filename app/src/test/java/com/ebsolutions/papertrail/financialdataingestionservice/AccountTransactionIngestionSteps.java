@@ -29,8 +29,25 @@ public class AccountTransactionIngestionSteps extends BaseTest {
   private String accountId;
   private String supportedInstitution;
 
-  @And("an account transaction in the request body has an invalid institution")
-  public void anAccountTransactionInTheRequestBodyHasAnInvalidInstitution()
+  @And("the account transaction envelope has a valid file with a valid account transaction")
+  public void theAccountTransactionEnvelopeHasAValidFileWithAValidAccountTransaction() {
+    mockMultipartFile =
+        new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
+            "1450,Chipotle,2025-09-13".getBytes());
+  }
+
+  @And("the account transaction envelope has a valid file with an invalid account transaction")
+  public void theAccountTransactionEnvelopeHasAValidFileWithAnInvalidAccountTransaction(
+      DataTable dataTable) {
+    String fileContent = dataTable.column(0).getFirst();
+
+    mockMultipartFile =
+        new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
+            fileContent.getBytes());
+  }
+
+  @And("the account transaction envelope in the request body has an invalid institution")
+  public void theAccountTransactionEnvelopeInTheRequestBodyHasAnInvalidInstitution()
       throws JsonProcessingException {
     AccountTransactionFileEnvelope accountTransactionFileEnvelope =
         AccountTransactionFileEnvelope
@@ -43,12 +60,11 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     requestContent =
         objectMapper.writeValueAsString(
             Collections.singletonList(accountTransactionFileEnvelope));
-
-    System.out.println(requestContent);
   }
 
-  @And("an account transaction in the request body has a null file")
-  public void anAccountTransactionInTheRequestBodyHasANullFile() throws JsonProcessingException {
+  @And("the account transaction envelope in the request body has a null file")
+  public void theAccountTransactionEnvelopeInTheRequestBodyHasANullFile()
+      throws JsonProcessingException {
     AccountTransactionFileEnvelope accountTransactionFileEnvelope =
         AccountTransactionFileEnvelope
             .builder()
@@ -62,36 +78,31 @@ public class AccountTransactionIngestionSteps extends BaseTest {
             Collections.singletonList(accountTransactionFileEnvelope));
   }
 
-  @And("an account transaction in the request body has an empty file")
-  public void anAccountTransactionInTheRequestBodyHasAnEmptyFile() {
+  @And("the account transaction envelope in the request body has an empty file")
+  public void theAccountTransactionEnvelopeInTheRequestBodyHasAnEmptyFile() {
     mockMultipartFile =
         new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE, new byte[0]);
   }
 
-  @And("the account transaction has a valid file")
-  public void theAccountTransactionHasAValidFile() {
-    mockMultipartFile =
-        new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
-            "non-empty-file".getBytes());
-  }
 
-  @And("the account id in the account transaction is valid")
-  public void theAccountIdInTheAccountTransactionIsValid() {
+  @And("the account id in the account transaction envelope is valid")
+  public void theAccountIdInTheAccountTransactionEnvelopeIsValid() {
     accountId = "1";
   }
 
-  @And("an account transaction in the request body has an invalid account id")
-  public void anAccountTransactionInTheRequestBodyHasAnInvalidAccountId(DataTable dataTable) {
+  @And("the account transaction envelope in the request body has an invalid account id")
+  public void theAccountTransactionEnvelopeInTheRequestBodyHasAnInvalidAccountId(
+      DataTable dataTable) {
     accountId = dataTable.column(0).getFirst();
   }
 
-  @And("the supported institution in the account transaction is valid")
-  public void theSupportedInstitutionInTheAccountTransactionIsValid() {
+  @And("the supported institution in the account transaction envelope is valid")
+  public void theSupportedInstitutionInTheAccountTransactionEnvelopeIsValid() {
     supportedInstitution = SupportedInstitution.AMEX.getValue();
   }
 
-  @And("the supported institution in the account transaction is not valid")
-  public void theSupportedInstitutionInTheAccountTransactionIsNotValid() {
+  @And("the supported institution in the account transaction envelope is not valid")
+  public void theSupportedInstitutionInTheAccountTransactionEnvelopeIsNotValid() {
     supportedInstitution = "NOT_VALID";
   }
 
