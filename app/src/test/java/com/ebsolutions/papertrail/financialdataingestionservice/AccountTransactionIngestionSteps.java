@@ -14,6 +14,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -131,7 +132,13 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     String content = mockHttpServletResponse.getContentAsString();
 
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
-    Assertions.assertEquals(dataTable.column(1).getFirst(), errorResponse.getMessages().getFirst());
+
+    List<String> matchingErrorMessages = errorResponse.getMessages().stream()
+        .filter(message -> dataTable.column(1).getFirst().equals(message)).toList();
+
+    if (matchingErrorMessages.isEmpty()) {
+      Assertions.fail("Error message not found: ".concat(dataTable.column(1).getFirst()));
+    }
   }
 
   @When("the ingest account transactions endpoint is invoked with a null file")

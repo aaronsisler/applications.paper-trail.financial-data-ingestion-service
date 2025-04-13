@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.5.0] Account Transaction CSV invalid field validation
+
+### Added
+
+- Adding in the validation for description and amount for Account Transaction in the CSV
+
 ## [0.4.0] Account Transaction Contract cleanup
 
 ### Changed

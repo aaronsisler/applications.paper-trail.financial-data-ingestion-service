@@ -15,6 +15,9 @@
 
     <properties>
         <start-class>com.ebsolutions.papertrail.financialdataingestionservice.Application</start-class>
+
+        <!-- Versions: Dependencies -->
+        <opencsv.version>5.10</opencsv.version>
     </properties>
 
     <dependencyManagement>
@@ -70,6 +73,14 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- Used for parsing the incoming CSV file -->
+        <!-- Version: Explicit -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${opencsv.version}</version>
         </dependency>
 
         <!-- Testing framework for starting Spring context and MockMVC -->
