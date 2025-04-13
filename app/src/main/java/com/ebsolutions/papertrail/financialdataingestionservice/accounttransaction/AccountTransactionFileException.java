@@ -12,12 +12,12 @@ public class AccountTransactionFileException extends RuntimeException {
   @Serial
   private static final long serialVersionUID = 1;
 
-  private List<ErrorMessageEnvelope> errorMessageEnvelopes = new ArrayList<>();
+  private final List<ErrorMessageEnvelope> errorMessageEnvelopes = new ArrayList<>();
 
   public AccountTransactionFileException(String message,
                                          List<ErrorMessageEnvelope> errorMessageEnvelopes) {
     super(message);
-    this.errorMessageEnvelopes = errorMessageEnvelopes;
+    this.errorMessageEnvelopes.addAll(errorMessageEnvelopes);
   }
 
   public AccountTransactionFileException(String message) {
