@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.Collections;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -83,9 +84,28 @@ public class ControllerExceptionHandler {
   public ResponseEntity<ErrorResponse> handleAccountTransactionFileException(
       AccountTransactionFileException accountTransactionFileException) {
 
-    return ResponseEntity.badRequest().body(ErrorResponse.builder()
-        .messages(Collections.singletonList(accountTransactionFileException.getMessage()))
-        .build());
+    if (accountTransactionFileException.getErrorMessageEnvelopes().isEmpty()) {
+      return ResponseEntity.badRequest()
+          .body(
+              ErrorResponse.builder()
+                  .messages(Collections.singletonList(accountTransactionFileException.getMessage()))
+                  .build()
+          );
+    }
+
+    List<String> messages =
+        accountTransactionFileException.getErrorMessageEnvelopes().stream()
+            .map(errorMessageEnvelope ->
+                "Row " + errorMessageEnvelope.getRowId()
+                    + " :: " + errorMessageEnvelope.getErrorMessage())
+            .toList();
+
+    return ResponseEntity.badRequest()
+        .body(
+            ErrorResponse.builder()
+                .messages(messages)
+                .build()
+        );
   }
 
   /**
