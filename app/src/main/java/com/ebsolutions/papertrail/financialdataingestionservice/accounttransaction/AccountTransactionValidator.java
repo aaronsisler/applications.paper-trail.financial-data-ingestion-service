@@ -40,6 +40,14 @@ public class AccountTransactionValidator {
             .build());
       }
 
+      // Check if date is the correct format
+      if (!DateValidationUtil.validate(accountTransactionDto.getTransactionDate())) {
+        errorMessageEnvelopes.add(ErrorMessageEnvelope.builder()
+            .rowId(accountTransactionDto.getRowId())
+            .errorMessage("Transaction Date is not a valid format YYYY-MM-DD")
+            .build());
+      }
+
       // If any errors are present, return the errors
       if (!errorMessageEnvelopes.isEmpty()) {
         return errorMessageEnvelopes;
