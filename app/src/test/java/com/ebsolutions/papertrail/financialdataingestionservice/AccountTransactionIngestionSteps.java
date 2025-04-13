@@ -63,7 +63,7 @@ public class AccountTransactionIngestionSteps extends BaseTest {
   }
 
   @And("an account transaction in the request body has an empty file")
-  public void anAccountTransactionInTheRequestBodyHasAnEmptyFile() throws JsonProcessingException {
+  public void anAccountTransactionInTheRequestBodyHasAnEmptyFile() {
     mockMultipartFile =
         new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE, new byte[0]);
   }

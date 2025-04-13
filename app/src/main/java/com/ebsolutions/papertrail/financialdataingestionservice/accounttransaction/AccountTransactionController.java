@@ -25,7 +25,7 @@ public class AccountTransactionController {
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE
   )
-  public ResponseEntity<?> loadFile(
+  public ResponseEntity<Void> loadFile(
       @ModelAttribute @Valid AccountTransactionFileEnvelope accountTransactionFileEnvelope) {
 
     accountTransactionService.process(accountTransactionFileEnvelope);
