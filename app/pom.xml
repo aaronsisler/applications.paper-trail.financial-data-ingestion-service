@@ -150,7 +150,17 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.parent.basedir}/contracts/common.yaml</inputSpec>
+                            <inputSpec>${project.parent.basedir}/contracts/inbound/common.yaml</inputSpec>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>models-account-transaction-ingestion</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.parent.basedir}/contracts/inbound/account-transaction-ingestion.yaml
+                            </inputSpec>
                         </configuration>
                     </execution>
                     <execution>
@@ -159,7 +169,13 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.parent.basedir}/contracts/account-transaction.yaml</inputSpec>
+                            <inputSpec>${project.parent.basedir}/contracts/outbound/account-transaction.yaml</inputSpec>
+                            <configOptions>
+                                <additionalModelTypeAnnotations>
+                                    @lombok.AllArgsConstructor
+                                    @lombok.Builder
+                                </additionalModelTypeAnnotations>
+                            </configOptions>
                         </configuration>
                     </execution>
                 </executions>

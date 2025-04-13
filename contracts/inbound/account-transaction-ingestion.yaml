@@ -31,28 +31,3 @@ components:
           format: csv-file
         supportedInstitution:
           $ref: "#/components/schemas/SupportedInstitution"
-#    AccountTransaction:
-#      type: object
-#      required:
-#        - accountId
-#        - amount
-#        - description
-#        - transactionDate
-#      properties:
-#        id:
-#          type: integer
-#        accountId:
-#          type: integer
-#          minimum: 1
-#        amount:
-#          type: integer
-#          description: Amount in pennies
-#          minimum: 1
-#        description:
-#          type: string
-#          minLength: 1
-#        transactionDate:
-#          type: string
-#          format: local-date
-#          example: "2019-05-17"
-
