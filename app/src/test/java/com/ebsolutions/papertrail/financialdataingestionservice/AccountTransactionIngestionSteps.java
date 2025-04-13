@@ -137,6 +137,7 @@ public class AccountTransactionIngestionSteps extends BaseTest {
         .filter(message -> dataTable.column(1).getFirst().equals(message)).toList();
 
     if (matchingErrorMessages.isEmpty()) {
+      System.out.println(errorResponse.getMessages());
       Assertions.fail("Error message not found: ".concat(dataTable.column(1).getFirst()));
     }
   }

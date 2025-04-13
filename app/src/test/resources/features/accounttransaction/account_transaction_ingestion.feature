@@ -19,10 +19,14 @@ Feature: Account Transaction: Ingestion
       | <statusCode> | <responseMessage> |
 
     Examples:
-      | accountTransaction               | statusCode | responseMessage                        |
-      | 123,,2025-09-13                  | 400        | Row 1 :: Description cannot be blank   |
-      | ,Valid_Description,2025-09-13    | 400        | Row 1 :: Amount cannot be blank        |
-      | ABC,Valid_Description,2025-09-13 | 400        | Row 1 :: Amount is not a valid integer |
+      | accountTransaction               | statusCode | responseMessage                                            |
+      | 123,,2025-09-13                  | 400        | Row 1 :: Description cannot be blank                       |
+      | ,Valid_Description,2025-09-13    | 400        | Row 1 :: Amount cannot be blank                            |
+      | ABC,Valid_Description,2025-09-13 | 400        | Row 1 :: Amount is not a valid integer                     |
+      | 123,Valid_Description,           | 400        | Row 1 :: Transaction date cannot be blank                  |
+      | 123,Valid_Description,ABC        | 400        | Row 1 :: Transaction Date is not a valid format YYYY-MM-DD |
+      | 123,Valid_Description,2025-13-25 | 400        | Row 1 :: Transaction Date is not a valid format YYYY-MM-DD |
+      | 123,Valid_Description,2025-04-32 | 400        | Row 1 :: Transaction Date is not a valid format YYYY-MM-DD |
 
   Scenario Outline: Institution is not valid returns correct error
     Given application is up
