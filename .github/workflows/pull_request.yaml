@@ -20,4 +20,4 @@ jobs:
           cache: "maven"
 
       - name: Build Application
-        run: mvn clean install
+        run: mvn clean install verify sonar:sonar
