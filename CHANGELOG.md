@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.4.0] Account Transaction Contract cleanup
+
+### Changed
+
+- Needing to modify how the contracts are so the constructors are happy
+- Adding in the shell for some invalid account transaction tests
+
 ## [0.3.0] Ingest Account Transaction
 
 ### Added
