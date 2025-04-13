@@ -1,5 +1,14 @@
 Feature: Account Transaction: Ingestion
 
+  Scenario: Account transaction is valid returns correct response
+    Given application is up
+    And the account transaction has a valid file
+    And the account id in the account transaction is valid
+    And the supported institution in the account transaction is valid
+    When the ingest account transactions endpoint is invoked
+    Then the correct accepted response is returned from the ingest transactions endpoint
+
+
   Scenario Outline: Institution is not valid returns correct error
     Given application is up
     And the account transaction has a valid file

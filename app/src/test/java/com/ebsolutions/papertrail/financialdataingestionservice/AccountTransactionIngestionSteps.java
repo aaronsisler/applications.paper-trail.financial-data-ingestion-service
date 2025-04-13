@@ -131,4 +131,11 @@ public class AccountTransactionIngestionSteps extends BaseTest {
             .accept(MediaType.APPLICATION_JSON))
         .andReturn();
   }
+
+  @Then("the correct accepted response is returned from the ingest transactions endpoint")
+  public void theCorrectAcceptedResponseIsReturnedFromTheIngestTransactionsEndpoint() {
+    MockHttpServletResponse mockHttpServletResponse = result.getResponse();
+
+    Assertions.assertEquals(HttpStatus.ACCEPTED.value(), mockHttpServletResponse.getStatus());
+  }
 }
