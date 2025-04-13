@@ -2,7 +2,10 @@ package com.ebsolutions.papertrail.financialdataingestionservice.accounttransact
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DateValidationUtil {
   public static final String DATE_FORMAT = "yyyy-MM-dd";
   public static final DateTimeFormatter DATE_TIME_FORMATTER =
