@@ -19,10 +19,10 @@ Feature: Account Transaction: Ingestion
       | <statusCode> | <responseMessage> |
 
     Examples:
-      | accountTransaction            | statusCode | responseMessage                        |
-      | 123,,2025-09-13               | 400        | Row 1 :: Description cannot be blank   |
-      | ,Valid_Description,2025-09-13 | 400        | Row 1 :: Amount cannot be blank        |
-      | ,Valid_Description,2025-09-13 | 400        | Row 1 :: Amount is not a valid integer |
+      | accountTransaction               | statusCode | responseMessage                        |
+      | 123,,2025-09-13                  | 400        | Row 1 :: Description cannot be blank   |
+      | ,Valid_Description,2025-09-13    | 400        | Row 1 :: Amount cannot be blank        |
+      | ABC,Valid_Description,2025-09-13 | 400        | Row 1 :: Amount is not a valid integer |
 
   Scenario Outline: Institution is not valid returns correct error
     Given application is up
