@@ -32,7 +32,7 @@ public class ControllerExceptionHandler {
                   schema = @Schema(implementation = ErrorResponse.class))
           }),
   })
-  @ExceptionHandler(ConstraintViolationException.class)
+  //  @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<ErrorResponse> handle(
       ConstraintViolationException constraintViolationException) {
     Set<ConstraintViolation<?>> violations = constraintViolationException.getConstraintViolations();
@@ -84,11 +84,16 @@ public class ControllerExceptionHandler {
       MethodArgumentNotValidException methodArgumentNotValidException) {
 
     if (methodArgumentNotValidException.getFieldError() != null) {
+
       return ResponseEntity.badRequest()
           .body(
               ErrorResponse.builder()
                   .messages(Collections.singletonList(
-                      methodArgumentNotValidException.getFieldError().getDefaultMessage()
+                      methodArgumentNotValidException.getFieldError().getField()
+                          + " "
+                          +
+                          methodArgumentNotValidException.getFieldError().getDefaultMessage()
+
                   ))
                   .build()
           );

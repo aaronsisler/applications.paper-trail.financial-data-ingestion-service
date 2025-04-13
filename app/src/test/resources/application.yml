@@ -9,11 +9,11 @@ management:
     env:
       enabled: true
 # Used to disable logging during test run
-#logging:
-#  level:
-#    root: OFF
-#    org:
-#      springframework: OFF
+logging:
+  level:
+    root: OFF
+    org:
+      springframework: OFF
 
 # Everything above these dashes will be applied to all profiles
 ---

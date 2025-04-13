@@ -25,6 +25,7 @@ components:
       properties:
         accountId:
           type: integer
+          minimum: 1
         file:
           type: string
           format: csv-file

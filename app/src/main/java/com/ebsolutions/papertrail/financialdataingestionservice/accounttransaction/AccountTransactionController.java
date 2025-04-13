@@ -2,6 +2,7 @@ package com.ebsolutions.papertrail.financialdataingestionservice.accounttransact
 
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransactionFileEnvelope;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.ErrorResponse;
+import jakarta.validation.Valid;
 import java.util.Collections;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,8 @@ public class AccountTransactionController {
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE
   )
   public ResponseEntity<?> loadFile(
-      @ModelAttribute AccountTransactionFileEnvelope accountTransactionFileEnvelope) {
+      @ModelAttribute @Valid AccountTransactionFileEnvelope accountTransactionFileEnvelope) {
+
     if (accountTransactionFileEnvelope.getFile() == null) {
       return ResponseEntity
           .badRequest()

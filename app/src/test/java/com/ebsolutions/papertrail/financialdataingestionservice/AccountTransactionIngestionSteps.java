@@ -26,6 +26,7 @@ public class AccountTransactionIngestionSteps extends BaseTest {
   private String requestContent;
   private MvcResult result;
   private MockMultipartFile mockMultipartFile;
+  private String accountId;
 
   @And("an account transaction in the request body has an invalid institution")
   public void anAccountTransactionInTheRequestBodyHasAnInvalidInstitution() {
@@ -53,11 +54,23 @@ public class AccountTransactionIngestionSteps extends BaseTest {
         new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE, new byte[0]);
   }
 
+  @And("the account transaction has a valid file")
+  public void theAccountTransactionHasAValidFile() {
+    mockMultipartFile =
+        new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
+            "non-empty-file".getBytes());
+  }
+
+  @And("an account transaction in the request body has an invalid account id")
+  public void anAccountTransactionInTheRequestBodyHasAnInvalidAccountId(DataTable dataTable) {
+    accountId = dataTable.column(0).getFirst();
+  }
+
   @When("the ingest account transactions endpoint is invoked")
   public void theIngestAccountTransactionsEndpointIsInvoked() throws Exception {
     result = mockMvc.perform(MockMvcRequestBuilders.multipart(UriConstants.ACCOUNT_TRANSACTIONS_URI)
             .file(mockMultipartFile)
-            .param("accountId", String.valueOf(1))
+            .param("accountId", accountId)
             .param("supportedInstitution", SupportedInstitution.AMEX.getValue()))
         .andReturn();
   }
@@ -89,6 +102,4 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
     Assertions.assertEquals(dataTable.column(1).getFirst(), errorResponse.getMessages().getFirst());
   }
-
-
 }
