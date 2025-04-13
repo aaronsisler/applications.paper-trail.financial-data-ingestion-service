@@ -29,6 +29,23 @@ public class AccountTransactionIngestionSteps extends BaseTest {
   private String accountId;
   private String supportedInstitution;
 
+  @And("the account transaction envelope has a valid file with a valid account transaction")
+  public void theAccountTransactionEnvelopeHasAValidFileWithAValidAccountTransaction() {
+    mockMultipartFile =
+        new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
+            "1450,Chipotle,2025-09-13".getBytes());
+  }
+
+  @And("the account transaction envelope has a valid file with an invalid account transaction")
+  public void theAccountTransactionEnvelopeHasAValidFileWithAnInvalidAccountTransaction(
+      DataTable dataTable) {
+    String fileContent = dataTable.column(0).getFirst();
+
+    mockMultipartFile =
+        new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
+            fileContent.getBytes());
+  }
+
   @And("the account transaction envelope in the request body has an invalid institution")
   public void theAccountTransactionEnvelopeInTheRequestBodyHasAnInvalidInstitution()
       throws JsonProcessingException {
@@ -43,8 +60,6 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     requestContent =
         objectMapper.writeValueAsString(
             Collections.singletonList(accountTransactionFileEnvelope));
-
-    System.out.println(requestContent);
   }
 
   @And("the account transaction envelope in the request body has a null file")
@@ -69,12 +84,6 @@ public class AccountTransactionIngestionSteps extends BaseTest {
         new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE, new byte[0]);
   }
 
-  @And("the account transaction envelope has a valid file")
-  public void theAccountTransactionEnvelopeHasAValidFile() {
-    mockMultipartFile =
-        new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
-            "non-empty-file".getBytes());
-  }
 
   @And("the account id in the account transaction envelope is valid")
   public void theAccountIdInTheAccountTransactionEnvelopeIsValid() {

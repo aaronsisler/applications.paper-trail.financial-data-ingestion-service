@@ -2,15 +2,29 @@ Feature: Account Transaction: Ingestion
 
   Scenario: Account transaction is valid returns correct response
     Given application is up
-    And the account transaction envelope has a valid file
+    And the account transaction envelope has a valid file with a valid account transaction
     And the account id in the account transaction envelope is valid
     And the supported institution in the account transaction envelope is valid
     When the ingest account transactions endpoint is invoked
     Then the correct accepted response is returned from the ingest transactions endpoint
 
+  Scenario Outline: Account transaction is invalid returns correct bad request response
+    Given application is up
+    And the account transaction envelope has a valid file with an invalid account transaction
+      | <accountTransaction> |
+    And the account id in the account transaction envelope is valid
+    And the supported institution in the account transaction envelope is valid
+    When the ingest account transactions endpoint is invoked
+    Then the correct bad request response is returned from the ingest transactions endpoint
+      | <statusCode> | <responseMessage> |
+
+    Examples:
+      | accountTransaction   | statusCode | responseMessage                                     |
+      | ,Chipotle,2025-09-13 | 400        | Invalid argument: supportedInstitution :: NOT_VALID |
+
   Scenario Outline: Institution is not valid returns correct error
     Given application is up
-    And the account transaction envelope has a valid file
+    And the account transaction envelope has a valid file with a valid account transaction
     And the account id in the account transaction envelope is valid
     And the supported institution in the account transaction envelope is not valid
     When the ingest account transactions endpoint is invoked
@@ -25,7 +39,7 @@ Feature: Account Transaction: Ingestion
     Given application is up
     And the account transaction envelope in the request body has an invalid account id
       | <accountId> |
-    And the account transaction envelope has a valid file
+    And the account transaction envelope has a valid file with a valid account transaction
     And the supported institution in the account transaction envelope is valid
     When the ingest account transactions endpoint is invoked
     Then the correct bad request response is returned from the ingest transactions endpoint

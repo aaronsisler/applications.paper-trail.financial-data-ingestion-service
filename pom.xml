@@ -186,6 +186,11 @@
                             <!-- This also enabled useJakartaEe-->
                             <useSpringBoot3>true</useSpringBoot3>
                             <additionalModelTypeAnnotations>
+                                <!-- Needed for Object Mapper to convert from string to POJO -->
+                                <!--                                @lombok.AllArgsConstructor-->
+                                @lombok.RequiredArgsConstructor
+                                <!-- Needed for Object Mapper to convert from string to POJO -->
+                                <!--                                @lombok.NoArgsConstructor-->
                                 @lombok.Builder
                             </additionalModelTypeAnnotations>
 
