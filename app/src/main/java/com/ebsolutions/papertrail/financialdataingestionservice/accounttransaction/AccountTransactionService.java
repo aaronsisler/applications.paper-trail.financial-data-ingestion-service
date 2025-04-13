@@ -39,7 +39,7 @@ public class AccountTransactionService {
 
       accountTransactionDtos = cb.parse();
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new AccountTransactionFileException("File was not able to be parsed");
     }
 
     // Giving each row/DTO a row id to help with triaging data issues in file
