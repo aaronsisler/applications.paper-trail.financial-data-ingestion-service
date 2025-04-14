@@ -1,0 +1,28 @@
+name: Pull Request Merge
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Pull-Request:
+    name: Pull Request
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21 for x64
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "corretto"
+          cache: "maven"
+
+      - name: Build Application
+        run: mvn clean install --no-transfer-progress
+
+      - name: SonarQubeScan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
