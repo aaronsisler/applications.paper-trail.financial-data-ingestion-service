@@ -10,14 +10,22 @@
 - Contract created/updated
 - Dependencies added to pom(s) are commented with what their usage is
 - Layers are created/updated and follows naming conventions:
-  - Controller
-  - Service
-  - Repository
-  - DAO
-  - DTO
+    - Controller
+    - Service
+    - Repository
+    - DAO
+    - DTO
 - Features and tests are added/updated
 - API collection (Bruno) is updated and committed to api-client repository
 - Bump the version of the app in the pom
 - Update the [change log](./CHANGELOG.md)
 
 </details>
+
+### Helpful
+
+Needed for the initial creation of the Shell script
+
+```bash
+chmod +x integration-tests/init-scripts/init-localstack-setup.sh
+```

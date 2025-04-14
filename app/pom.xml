@@ -18,15 +18,21 @@
 
         <!-- Versions: Dependencies -->
         <opencsv.version>5.10</opencsv.version>
+        <software.amazon.awssdk.bom.version>2.28.16</software.amazon.awssdk.bom.version>
 
-        <!--        <sonar.exclusions>-->
-        <!--            **/**/Application.java,-->
-        <!--            **/model/*-->
-        <!--        </sonar.exclusions>-->
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- AWS SDK library needed for Database and File Storage access -->
+            <!-- Version: Explicit -->
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>bom</artifactId>
+                <version>${software.amazon.awssdk.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -86,6 +92,13 @@
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
             <version>${opencsv.version}</version>
+        </dependency>
+
+        <!-- Used for AWS SQS -->
+        <!-- Version: AWS BOM -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>sqs</artifactId>
         </dependency>
 
         <!-- Testing framework for starting Spring context and MockMVC -->

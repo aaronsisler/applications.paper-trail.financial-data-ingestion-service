@@ -1,11 +1,13 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
 
+import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransaction;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransactionFileEnvelope;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountTransactionService {
   private final AccountTransactionValidator accountTransactionValidator;
+  private final AccountTransactionPublisher accountTransactionPublisher;
 
   public void process(AccountTransactionFileEnvelope accountTransactionFileEnvelope) {
     if (accountTransactionFileEnvelope.getFile() == null) {
@@ -65,5 +68,19 @@ public class AccountTransactionService {
     if (!errorMessageEnvelopes.isEmpty()) {
       throw new AccountTransactionFileException("File has errors", errorMessageEnvelopes);
     }
+
+    // If no records in the violations list, send back a good request of Account Transactions
+    List<AccountTransaction> accountTransactions =
+        accountTransactionDtos.stream().map(accountTransactionDto ->
+            AccountTransaction.builder()
+                .accountId(accountTransactionFileEnvelope.getAccountId())
+                .amount(Integer.parseInt(accountTransactionDto.getAmount()))
+                .description(accountTransactionDto.getDescription())
+                .transactionDate(LocalDate.parse(accountTransactionDto.getTransactionDate()))
+                .build()
+        ).toList();
+
+    // Publish the account transactions to stream
+    accountTransactionPublisher.publish(accountTransactions);
   }
 }
