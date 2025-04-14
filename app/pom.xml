@@ -26,6 +26,9 @@
         <sonar.organization>aaronsisler</sonar.organization>
         <sonar.projectKey>aaronsisler_applications.paper-trail.financial-data-ingestion-service</sonar.projectKey>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.exclusions>
+            **/model/*
+        </sonar.exclusions>
     </properties>
 
     <dependencyManagement>
@@ -151,11 +154,31 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>jacoco-site</id>
-                        <phase>package</phase>
+                        <id>report</id>
+                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
+                    </execution>
+                    <execution>
+                        <id>pre-integration-test</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
+                            <propertyName>failsafeJacocoAgent</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-integration-test</id>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -241,6 +264,7 @@
                             <goal>integration-test</goal>
                         </goals>
                         <configuration>
+                            <argLine>${failsafeJacocoAgent}</argLine>
                             <systemPropertyVariables>
                                 <!-- This triggers the correct config and keeps the H2 DB from spinning up -->
                                 <spring.profiles.active>mocked</spring.profiles.active>
