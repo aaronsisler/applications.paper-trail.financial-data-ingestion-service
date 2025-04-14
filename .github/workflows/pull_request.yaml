@@ -20,4 +20,16 @@ jobs:
           cache: "maven"
 
       - name: Build Application
-        run: mvn clean install
+        run: mvn clean install --no-transfer-progress
+
+      #      - name: Build and analyze
+      #        env:
+      #          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #        run: mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar --no-transfer-progress \
+      #          -Dsonar.organization=aaronsisler \
+      #          -Dsonar.projectKey=aaronsisler_applications.paper-trail.financial-data-ingestion-service
+
+      - name: SonarQubeScan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

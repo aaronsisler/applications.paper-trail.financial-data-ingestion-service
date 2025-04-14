@@ -40,7 +40,19 @@
         <!-- Versions: Testing Dependencies -->
         <cucumber-bom.version>7.20.1</cucumber-bom.version>
         <junit-bom.version>5.11.4</junit-bom.version>
+
+        <sonar.organization>aaronsisler</sonar.organization>
+        <sonar.projectKey>aaronsisler_applications.paper-trail.financial-data-ingestion-service</sonar.projectKey>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>5.1.0.4751</version>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>
