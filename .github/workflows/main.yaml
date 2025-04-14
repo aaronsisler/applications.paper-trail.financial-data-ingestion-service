@@ -5,8 +5,8 @@ on:
       - main
 
 jobs:
-  Pull-Request:
-    name: Pull Request
+  Pull-Request-Merge:
+    name: Pull Request Merge
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
