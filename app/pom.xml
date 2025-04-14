@@ -19,14 +19,8 @@
         <!-- Versions: Dependencies -->
         <opencsv.version>5.10</opencsv.version>
 
-        <jacoco.version>0.8.13</jacoco.version>
-        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-        <sonar.jacoco.reportPath>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
-        <sonar.language>java</sonar.language>
-        <sonar.organization>aaronsisler</sonar.organization>
-        <sonar.projectKey>aaronsisler_applications.paper-trail.financial-data-ingestion-service</sonar.projectKey>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.exclusions>
+            **/Application.java,
             **/model/*
         </sonar.exclusions>
     </properties>
@@ -37,11 +31,11 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>org.sonarsource.scanner.maven</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-            <version>5.1.0.4751</version>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.sonarsource.scanner.maven</groupId>-->
+        <!--            <artifactId>sonar-maven-plugin</artifactId>-->
+        <!--            <version>5.1.0.4751</version>-->
+        <!--        </dependency>-->
         <!-- Contains Spring Boot Starter and Tomcat web server -->
         <!-- Version: Spring Parent -->
         <dependency>
@@ -142,46 +136,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
-                <executions>
-                    <execution>
-                        <id>jacoco-initialize</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>pre-integration-test</id>
-                        <goals>
-                            <goal>prepare-agent-integration</goal>
-                        </goals>
-                        <configuration>
-                            <destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
-                            <propertyName>failsafeJacocoAgent</propertyName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>post-integration-test</id>
-                        <goals>
-                            <goal>report-integration</goal>
-                        </goals>
-                        <configuration>
-                            <dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
-                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <!-- Used to compile the sources of your project -->
             <!-- Version: Parent POM PIM -->
             <plugin>
@@ -252,6 +206,47 @@
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
+            <!-- Used to run agent that collects code coverage -->
+            <!-- Version: Parent POM PIM -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>pre-integration-test</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
+                            <propertyName>failsafeJacocoAgent</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-integration-test</id>
+                        <goals>
+                            <goal>report-integration</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Used for running the Cucumber feature tests -->
             <!-- Version: Parent POM PIM -->
             <plugin>
@@ -264,6 +259,7 @@
                             <goal>integration-test</goal>
                         </goals>
                         <configuration>
+                            <!-- This comes from the JaCoCo plugin -->
                             <argLine>${failsafeJacocoAgent}</argLine>
                             <systemPropertyVariables>
                                 <!-- This triggers the correct config and keeps the H2 DB from spinning up -->
