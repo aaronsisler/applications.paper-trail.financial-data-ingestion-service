@@ -28,6 +28,7 @@
         <!-- Versions: Plugins -->
         <checkstyle-maven-plugin.version>3.5.0</checkstyle-maven-plugin.version>
         <flatten-maven-plugin.version>1.7.0</flatten-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
         <maven-failsafe-plugin.version>3.5.2</maven-failsafe-plugin.version>
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <openapi-generator-maven-plugin.version>7.11.0</openapi-generator-maven-plugin.version>
@@ -41,18 +42,7 @@
         <cucumber-bom.version>7.20.1</cucumber-bom.version>
         <junit-bom.version>5.11.4</junit-bom.version>
 
-        <sonar.organization>aaronsisler</sonar.organization>
-        <sonar.projectKey>aaronsisler_applications.paper-trail.financial-data-ingestion-service</sonar.projectKey>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.sonarsource.scanner.maven</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-            <version>5.1.0.4751</version>
-        </dependency>
-    </dependencies>
 
     <dependencyManagement>
         <dependencies>
@@ -210,6 +200,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco-maven-plugin.version}</version>
                 </plugin>
                 <!-- Used for running the Cucumber tests and finding feature files -->
                 <!-- Version: Explicit -->
