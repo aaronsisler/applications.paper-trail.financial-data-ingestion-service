@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -34,29 +35,18 @@ public class ControllerExceptionHandler {
   public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
       MethodArgumentNotValidException methodArgumentNotValidException) {
 
-    if (methodArgumentNotValidException.getFieldError() != null) {
-
-      return ResponseEntity.badRequest()
-          .body(
-              ErrorResponse.builder()
-                  .messages(Collections.singletonList(
-                      "Invalid argument: "
-                          +
-                          methodArgumentNotValidException.getFieldError().getField()
-                          + " :: "
-                          +
-                          methodArgumentNotValidException.getFieldError().getRejectedValue()
-
-                  ))
-                  .build()
-          );
-    }
-
     return ResponseEntity.badRequest()
         .body(
             ErrorResponse.builder()
                 .messages(Collections.singletonList(
-                    "Invalid input for a field"
+                    "Invalid argument: "
+                        +
+                        Objects.requireNonNull(methodArgumentNotValidException.getFieldError())
+                            .getField()
+                        + " :: "
+                        +
+                        methodArgumentNotValidException.getFieldError().getRejectedValue()
+
                 ))
                 .build()
         );
