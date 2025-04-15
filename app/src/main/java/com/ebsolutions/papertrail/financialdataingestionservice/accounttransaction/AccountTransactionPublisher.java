@@ -17,13 +17,14 @@ import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 @RequiredArgsConstructor
 public class AccountTransactionPublisher {
   private final SqsClient sqsClient;
-  private final ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
   private final EventQueue eventQueue;
 
   public void publish(List<AccountTransaction> accountTransactions) {
     try {
+      // If anything is null from processing, filter it out
       List<String> messages = accountTransactions
-          .stream().map(this::process).filter(Objects::isNull).toList();
+          .stream().map(this::process).filter(Objects::nonNull).toList();
 
       List<SendMessageRequest> sendMessageRequests =
           messages.stream().map(message ->

@@ -1,7 +1,10 @@
 package com.ebsolutions.papertrail.financialdataingestionservice;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.EventQueue;
 import com.ebsolutions.papertrail.financialdataingestionservice.config.UriConstants;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransactionFileEnvelope;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.ErrorResponse;
@@ -15,15 +18,24 @@ import io.cucumber.java.en.When;
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
+@RequiredArgsConstructor
 public class AccountTransactionIngestionSteps extends BaseTest {
+  private final SqsClient sqsClient;
+  private final EventQueue eventQueue;
+
   private String requestContent;
   private MvcResult result;
   private MockMultipartFile mockMultipartFile;
@@ -85,6 +97,10 @@ public class AccountTransactionIngestionSteps extends BaseTest {
         new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE, new byte[0]);
   }
 
+  @And("the correct queue is provided")
+  public void theCorrectQueueIsProvided() {
+    when(eventQueue.getQueueUrl()).thenReturn("correct_queue_url");
+  }
 
   @And("the account id in the account transaction envelope is valid")
   public void theAccountIdInTheAccountTransactionEnvelopeIsValid() {
@@ -156,5 +172,19 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
     Assertions.assertEquals(HttpStatus.ACCEPTED.value(), mockHttpServletResponse.getStatus());
+  }
+
+  @And("the account transactions are published to the queue")
+  public void theAccountTransactionsArePublishedToTheQueue() {
+
+    ArgumentCaptor<SendMessageRequest> argument = ArgumentCaptor.forClass(SendMessageRequest.class);
+    Mockito.verify(sqsClient, times(1)).sendMessage(argument.capture());
+
+    Assertions.assertEquals("correct_queue_url", argument.getValue().queueUrl());
+
+    Assertions.assertEquals(
+        "{\"id\":null,\"accountId\":1,\"amount\":1450,\"description\":\"Chipotle\",\"transactionDate\":[2025,9,13]}",
+        argument.getValue().messageBody());
+
   }
 }
