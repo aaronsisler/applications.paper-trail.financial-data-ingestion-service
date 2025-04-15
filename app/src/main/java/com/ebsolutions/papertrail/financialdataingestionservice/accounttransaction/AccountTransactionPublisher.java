@@ -17,7 +17,7 @@ import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 @RequiredArgsConstructor
 public class AccountTransactionPublisher {
   private final SqsClient sqsClient;
-  private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
+  private final ObjectMapper objectMapper;
   private final EventQueue eventQueue;
 
   public void publish(List<AccountTransaction> accountTransactions) {
@@ -25,6 +25,10 @@ public class AccountTransactionPublisher {
       // If anything is null from processing, filter it out
       List<String> messages = accountTransactions
           .stream().map(this::process).filter(Objects::nonNull).toList();
+
+      if (messages.isEmpty()) {
+        throw new AccountTransactionPublishException("Something went when parsing the messages");
+      }
 
       List<SendMessageRequest> sendMessageRequests =
           messages.stream().map(message ->
@@ -36,7 +40,7 @@ public class AccountTransactionPublisher {
       sendMessageRequests.forEach(sqsClient::sendMessage);
     } catch (Exception exception) {
       log.error(exception.getMessage());
-      throw exception;
+      throw new AccountTransactionPublishException("Something went wrong publishing to queue");
     }
   }
 

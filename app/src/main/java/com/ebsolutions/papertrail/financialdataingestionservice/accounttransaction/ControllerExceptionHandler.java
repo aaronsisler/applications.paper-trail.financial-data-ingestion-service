@@ -98,6 +98,24 @@ public class ControllerExceptionHandler {
         );
   }
 
+
+  /**
+   * @param accountTransactionPublishException caught in controller as thrown from service
+   * @return custom response with descriptive error messages
+   */
+  @ExceptionHandler(AccountTransactionPublishException.class)
+  public ResponseEntity<ErrorResponse> handleAccountTransactionPublishException(
+      AccountTransactionPublishException accountTransactionPublishException) {
+
+    return ResponseEntity.internalServerError()
+        .body(
+            ErrorResponse.builder()
+                .messages(
+                    Collections.singletonList(accountTransactionPublishException.getMessage()))
+                .build()
+        );
+  }
+
   /**
    * @param exception caught in controller as thrown from service
    * @return custom response with descriptive error messages

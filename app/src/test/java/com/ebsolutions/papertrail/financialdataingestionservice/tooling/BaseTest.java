@@ -34,5 +34,8 @@ public class BaseTest {
 
     @MockBean
     protected EventQueue eventQueue;
+
+    @MockBean
+    protected ObjectMapper objectMapper;
   }
 }

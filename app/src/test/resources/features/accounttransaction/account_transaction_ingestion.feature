@@ -10,7 +10,7 @@ Feature: Account Transaction: Ingestion
     Then the correct accepted response is returned from the ingest transactions endpoint
     And the account transactions are published to the queue
 
-  Scenario: Account transaction fails to publish to queue
+  Scenario Outline: Account transaction fails to publish to queue
     Given application is up
     And the account transaction envelope has a valid file with a valid account transaction
     And the account id in the account transaction envelope is valid
@@ -18,10 +18,14 @@ Feature: Account Transaction: Ingestion
     And the correct queue is provided
     And the message fails to publish to the queue
     When the ingest account transactions endpoint is invoked
-    Then the correct accepted response is returned from the ingest transactions endpoint
-    And the account transactions are not published to the queue
+    Then the correct failure response is returned from the ingest transactions endpoint
+      | <statusCode> | <responseMessage> |
 
-  Scenario: Account transaction fails to be parsed for the queue
+    Examples:
+      | statusCode | responseMessage                          |
+      | 500        | Something went wrong publishing to queue |
+
+  Scenario Outline: Account transaction fails to be parsed for the queue
     Given application is up
     And the account transaction envelope has a valid file with a valid account transaction
     And the account id in the account transaction envelope is valid
@@ -29,8 +33,13 @@ Feature: Account Transaction: Ingestion
     And the correct queue is provided
     And the message fails to parse into a string for the queue
     When the ingest account transactions endpoint is invoked
-    Then the correct accepted response is returned from the ingest transactions endpoint
+    Then the correct failure response is returned from the ingest transactions endpoint
+      | <statusCode> | <responseMessage> |
     And the account transactions are not published to the queue
+
+    Examples:
+      | statusCode | responseMessage                          |
+      | 500        | Something went wrong publishing to queue |
 
   Scenario Outline: Account transaction is invalid returns correct bad request response
     Given application is up

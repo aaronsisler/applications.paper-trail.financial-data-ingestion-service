@@ -2,6 +2,8 @@
 
 ## TODOs
 
+- Have a way to check what the status of the Sonar run was to block the PR
+
 ## Definition of Done
 
 <details>

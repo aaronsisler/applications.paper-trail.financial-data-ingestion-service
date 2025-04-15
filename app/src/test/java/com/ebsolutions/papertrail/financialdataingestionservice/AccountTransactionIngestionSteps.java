@@ -1,16 +1,20 @@
 package com.ebsolutions.papertrail.financialdataingestionservice;
 
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.EventQueue;
 import com.ebsolutions.papertrail.financialdataingestionservice.config.UriConstants;
+import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransaction;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransactionFileEnvelope;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.SupportedInstitution;
 import com.ebsolutions.papertrail.financialdataingestionservice.tooling.BaseTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -30,11 +34,14 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
+import software.amazon.awssdk.services.sqs.model.SqsException;
+
 
 @RequiredArgsConstructor
 public class AccountTransactionIngestionSteps extends BaseTest {
   private final SqsClient sqsClient;
   private final EventQueue eventQueue;
+  private final ObjectMapper injectedObjectMapper;
 
   private String requestContent;
   private MvcResult result;
@@ -123,6 +130,18 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     supportedInstitution = "NOT_VALID";
   }
 
+  @And("the message fails to publish to the queue")
+  public void theMessageFailsToPublishToTheQueue() {
+    doThrow(SqsException.builder().build()).when(sqsClient)
+        .sendMessage(any(SendMessageRequest.class));
+  }
+
+  @And("the message fails to parse into a string for the queue")
+  public void theMessageFailsToParseIntoAStringForTheQueue() throws JsonProcessingException {
+    when(injectedObjectMapper.writeValueAsString(AccountTransaction.class))
+        .thenThrow(JsonProcessingException.class);
+  }
+
   @When("the ingest account transactions endpoint is invoked")
   public void theIngestAccountTransactionsEndpointIsInvoked() throws Exception {
     result = mockMvc.perform(MockMvcRequestBuilders.multipart(UriConstants.ACCOUNT_TRANSACTIONS_URI)
@@ -185,6 +204,26 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     Assertions.assertEquals(
         "{\"id\":null,\"accountId\":1,\"amount\":1450,\"description\":\"Chipotle\",\"transactionDate\":[2025,9,13]}",
         argument.getValue().messageBody());
+
+  }
+
+  @And("the account transactions are not published to the queue")
+  public void theAccountTransactionsAreNotPublishedToTheQueue() {
+    Mockito.verifyNoInteractions(sqsClient);
+  }
+
+  @Then("the correct failure response is returned from the ingest transactions endpoint")
+  public void theCorrectFailureResponseIsReturnedFromTheIngestTransactionsEndpoint(
+      DataTable dataTable) throws UnsupportedEncodingException, JsonProcessingException {
+    MockHttpServletResponse mockHttpServletResponse = result.getResponse();
+
+    Assertions.assertEquals(Integer.parseInt(dataTable.column(0).getFirst()),
+        mockHttpServletResponse.getStatus());
+
+    String content = mockHttpServletResponse.getContentAsString();
+
+    ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
+    Assertions.assertEquals(dataTable.column(1).getFirst(), errorResponse.getMessages().getFirst());
 
   }
 }
