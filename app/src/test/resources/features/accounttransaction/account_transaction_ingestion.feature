@@ -6,6 +6,7 @@ Feature: Account Transaction: Ingestion
     And the account id in the account transaction envelope is valid
     And the supported institution in the account transaction envelope is valid
     And the correct queue is provided
+    And the message succeeds to parse into a string for the queue
     When the ingest account transactions endpoint is invoked
     Then the correct accepted response is returned from the ingest transactions endpoint
     And the account transactions are published to the queue
@@ -16,6 +17,7 @@ Feature: Account Transaction: Ingestion
     And the account id in the account transaction envelope is valid
     And the supported institution in the account transaction envelope is valid
     And the correct queue is provided
+    And the message succeeds to parse into a string for the queue
     And the message fails to publish to the queue
     When the ingest account transactions endpoint is invoked
     Then the correct failure response is returned from the ingest transactions endpoint
@@ -39,7 +41,7 @@ Feature: Account Transaction: Ingestion
 
     Examples:
       | statusCode | responseMessage                          |
-      | 500        | Something went wrong publishing to queue |
+      | 500        | Something went when parsing the messages |
 
   Scenario Outline: Account transaction is invalid returns correct bad request response
     Given application is up

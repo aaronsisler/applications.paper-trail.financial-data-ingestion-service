@@ -48,6 +48,8 @@ public class AccountTransactionIngestionSteps extends BaseTest {
   private MockMultipartFile mockMultipartFile;
   private String accountId;
   private String supportedInstitution;
+  private String jsonAccountTransaction =
+      "{\"id\":null,\"accountId\":1,\"amount\":1450,\"description\":\"Chipotle\",\"transactionDate\":[2025,9,13]}";
 
   @And("the account transaction envelope has a valid file with a valid account transaction")
   public void theAccountTransactionEnvelopeHasAValidFileWithAValidAccountTransaction() {
@@ -187,8 +189,14 @@ public class AccountTransactionIngestionSteps extends BaseTest {
   }
 
   @Then("the correct accepted response is returned from the ingest transactions endpoint")
-  public void theCorrectAcceptedResponseIsReturnedFromTheIngestTransactionsEndpoint() {
+  public void theCorrectAcceptedResponseIsReturnedFromTheIngestTransactionsEndpoint()
+      throws UnsupportedEncodingException {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
+
+    String content = mockHttpServletResponse.getContentAsString();
+
+    System.out.println(content);
+
 
     Assertions.assertEquals(HttpStatus.ACCEPTED.value(), mockHttpServletResponse.getStatus());
   }
@@ -202,7 +210,7 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     Assertions.assertEquals("correct_queue_url", argument.getValue().queueUrl());
 
     Assertions.assertEquals(
-        "{\"id\":null,\"accountId\":1,\"amount\":1450,\"description\":\"Chipotle\",\"transactionDate\":[2025,9,13]}",
+        jsonAccountTransaction,
         argument.getValue().messageBody());
 
   }
@@ -225,5 +233,11 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
     Assertions.assertEquals(dataTable.column(1).getFirst(), errorResponse.getMessages().getFirst());
 
+  }
+
+  @And("the message succeeds to parse into a string for the queue")
+  public void theMessageSucceedsToParseIntoAStringForTheQueue() throws JsonProcessingException {
+    when(injectedObjectMapper.writeValueAsString(any(AccountTransaction.class)))
+        .thenReturn(jsonAccountTransaction);
   }
 }

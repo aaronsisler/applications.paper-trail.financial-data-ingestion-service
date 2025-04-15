@@ -21,15 +21,15 @@ public class AccountTransactionPublisher {
   private final EventQueue eventQueue;
 
   public void publish(List<AccountTransaction> accountTransactions) {
+    // If anything is null from processing, filter it out
+    List<String> messages = accountTransactions
+        .stream().map(this::process).filter(Objects::nonNull).toList();
+
+    if (messages.isEmpty()) {
+      throw new AccountTransactionPublishException("Something went when parsing the messages");
+    }
+
     try {
-      // If anything is null from processing, filter it out
-      List<String> messages = accountTransactions
-          .stream().map(this::process).filter(Objects::nonNull).toList();
-
-      if (messages.isEmpty()) {
-        throw new AccountTransactionPublishException("Something went when parsing the messages");
-      }
-
       List<SendMessageRequest> sendMessageRequests =
           messages.stream().map(message ->
               SendMessageRequest.builder()
