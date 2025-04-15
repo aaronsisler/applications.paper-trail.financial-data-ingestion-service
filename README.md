@@ -41,9 +41,9 @@ chmod +x integration-tests/init-scripts/init-localstack-setup.sh
 ```
 
 ```bash
-awslocal sqs receive-message --queue-url http://localhost:4566/000000000000/ACCOUNT_TRANSACTION_INGESTION_DATAFLOW
 awslocal sqs receive-message --endpoint-url http://sqs.us-east-1.localhost.localstack.cloud:4566 --queue-url http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/ACCOUNT_TRANSACTION_INGESTION_DATAFLOW
+```
 
+```bash
 awslocal sqs send-message --queue-url http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/ACCOUNT_TRANSACTION_INGESTION_DATAFLOW --message-body "Hello World"
-
 ```
