@@ -140,7 +140,7 @@ public class AccountTransactionIngestionSteps extends BaseTest {
 
   @And("the message fails to parse into a string for the queue")
   public void theMessageFailsToParseIntoAStringForTheQueue() throws JsonProcessingException {
-    when(injectedObjectMapper.writeValueAsString(AccountTransaction.class))
+    when(injectedObjectMapper.writeValueAsString(any(AccountTransaction.class)))
         .thenThrow(JsonProcessingException.class);
   }
 
