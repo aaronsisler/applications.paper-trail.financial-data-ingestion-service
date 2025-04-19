@@ -1,0 +1,58 @@
+openapi: "3.0.2"
+info:
+  title: Actuator API
+  version: "1.0"
+servers:
+  - url: http://localhost/
+paths:
+  /actuator/health:
+    get:
+      operationId: actuatorHealthGET
+      responses:
+        "200":
+          description: Health check from Spring Actuator
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthCheck"
+  /actuator/info:
+    get:
+      operationId: actuatorInfoGET
+      responses:
+        "200":
+          description: Info check from Spring Actuator
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  build:
+                    $ref: "#/components/schemas/BuildInfo"
+components:
+  schemas:
+    HealthCheck:
+      type: object
+      properties:
+        status:
+          type: string
+          example: UP
+    BuildInfo:
+      type: object
+      properties:
+        group:
+          type: string
+          example: "com.ebsolutions.papertrail"
+        artifact:
+          type: string
+          example: "financial-data-provider-service"
+        name:
+          type: string
+          example: "Financial Data Provider Service"
+        time:
+          type: string
+          format: date-time
+          example: "2025-02-16T00:57:04.590Z"
+        version:
+          type: string
+          example: "0.3.0"
+
