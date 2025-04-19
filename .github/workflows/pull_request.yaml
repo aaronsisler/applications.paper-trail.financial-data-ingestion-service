@@ -20,7 +20,7 @@ jobs:
           cache: "maven"
 
       - name: Build Application
-        run: mvn clean install --no-transfer-progress
+        run: mvn clean install --activate-profiles docker --no-transfer-progress --batch-mode
 
       - name: SonarQubeScan
         uses: SonarSource/sonarqube-scan-action@v4
