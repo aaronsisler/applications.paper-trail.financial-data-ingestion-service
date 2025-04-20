@@ -10,14 +10,16 @@ services:
     volumes:
       # This is called when Localstack container is starting up.
       # Using this for AWS CLI commands currently.
-      - ./init-scripts/init-localstack-setup.sh:/etc/localstack/init/ready.d/script.sh
-      - ./init-scripts/sqs-topic-definition.json:/opt/code/localstack/sqs-topic-definition.json
+      - ./integration-tests/init-scripts/init-localstack-setup.sh:/etc/localstack/init/ready.d/script.sh
+      - ./integration-tests/init-scripts/sqs-topic-definition.json:/opt/code/localstack/sqs-topic-definition.json
 
   app:
     depends_on:
       - infrastructure
     container_name: app
-    build: ../app
+    build: # "context" and "dockerfile" fields have to be under "build"
+      context: .
+      dockerfile: app/Dockerfile.dev
     ports:
       - "8080:8080"
     environment:

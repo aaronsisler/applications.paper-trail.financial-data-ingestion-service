@@ -18,23 +18,7 @@
 
         <!-- Versions: Dependencies -->
         <opencsv.version>5.10</opencsv.version>
-        <software.amazon.awssdk.bom.version>2.28.16</software.amazon.awssdk.bom.version>
-
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <!-- AWS SDK library needed for Database and File Storage access -->
-            <!-- Version: Explicit -->
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>bom</artifactId>
-                <version>${software.amazon.awssdk.bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <!-- Contains Spring Boot Starter and Tomcat web server -->

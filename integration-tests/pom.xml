@@ -47,6 +47,13 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <!-- Used for AWS SQS -->
+        <!-- Version: Dep Management -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>sqs</artifactId>
+        </dependency>
+
         <!-- Testing framework for starting Spring context and MockMVC -->
         <!-- Version: Spring Parent -->
         <dependency>
