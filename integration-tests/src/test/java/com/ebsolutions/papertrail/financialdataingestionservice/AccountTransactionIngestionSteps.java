@@ -27,7 +27,7 @@ import software.amazon.awssdk.services.sqs.model.Message;
 
 public class AccountTransactionIngestionSteps extends BaseStep {
   @Autowired
-  protected QueueMessageUtil queueMessageUtil = new QueueMessageUtil();
+  protected QueueMessageUtil queueMessageUtil = new QueueMessageUtil(endpoint, queueUrl);
   private ResponseEntity<AccountTransactionFileEnvelope> response;
   private MockMultipartFile mockMultipartFile;
   private String accountId;
@@ -91,6 +91,8 @@ public class AccountTransactionIngestionSteps extends BaseStep {
     List<Message> messages;
     Instant pollingEnd =
         Instant.now().plusMillis(TestConstants.QUEUE_POLLING_WAIT_PERIOD_IN_MILLISECONDS);
+    System.out.println("QUEuE");
+    System.out.println(queueUrl);
 
     do {
       // Wait between each polling since consumer is fast

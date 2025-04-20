@@ -2,6 +2,7 @@ package com.ebsolutions.papertrail.financialdataingestionservice;
 
 import java.net.URI;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -11,10 +12,10 @@ import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
 
 @Component
+@RequiredArgsConstructor
 public class QueueMessageUtil {
-  protected String endpoint = "http://sqs.us-east-1.localhost.localstack.cloud:4566";
-
-  protected String queueUrl = endpoint + "/000000000000/ACCOUNT_TRANSACTION_INGESTION_DATAFLOW";
+  protected final String endpoint;
+  protected final String queueUrl;
 
   public List<Message> consume() {
     try (SqsClient sqsClient = localSqsClientInstantiation()) {
