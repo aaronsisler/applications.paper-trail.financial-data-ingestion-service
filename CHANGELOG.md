@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.9.0] Account transaction queue test for integration testing
+
+### Added
+
+- Adding in the AWS Queue portion and listening to the output
+
 ## [0.8.0] Base of integration testing
 
 ### Added
