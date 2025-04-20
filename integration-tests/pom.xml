@@ -232,20 +232,20 @@
                                 </configuration>
                             </execution>
                             <!-- Tears down the Docker containers even if integration test fail -->
-                            <execution>
-                                <id>post-test-cleanup</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>docker</executable>
-                                    <arguments>
-                                        <argument>compose</argument>
-                                        <argument>down</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
+                            <!--                            <execution>-->
+                            <!--                                <id>post-test-cleanup</id>-->
+                            <!--                                <phase>post-integration-test</phase>-->
+                            <!--                                <goals>-->
+                            <!--                                    <goal>exec</goal>-->
+                            <!--                                </goals>-->
+                            <!--                                <configuration>-->
+                            <!--                                    <executable>docker</executable>-->
+                            <!--                                    <arguments>-->
+                            <!--                                        <argument>compose</argument>-->
+                            <!--                                        <argument>down</argument>-->
+                            <!--                                    </arguments>-->
+                            <!--                                </configuration>-->
+                            <!--                            </execution>-->
                         </executions>
                     </plugin>
                 </plugins>

@@ -27,7 +27,7 @@ public class AccountTransactionController {
   )
   public ResponseEntity<Void> loadFile(
       @ModelAttribute @Valid AccountTransactionFileEnvelope accountTransactionFileEnvelope) {
-
+    log.error("WE ARE HERE!");
     accountTransactionService.process(accountTransactionFileEnvelope);
 
     return ResponseEntity
