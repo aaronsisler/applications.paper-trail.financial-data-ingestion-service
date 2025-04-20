@@ -1,0 +1,4 @@
+infrastructure:
+  endpoint: http://sqs.us-east-1.localhost.localstack.cloud:4566
+  messaging:
+    queue-url: ${infrastructure.endpoint}/000000000000/ACCOUNT_TRANSACTION_INGESTION_DATAFLOW
