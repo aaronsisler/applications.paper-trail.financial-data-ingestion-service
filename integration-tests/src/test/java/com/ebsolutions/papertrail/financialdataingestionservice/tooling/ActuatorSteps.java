@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataingestionservice;
+package com.ebsolutions.papertrail.financialdataingestionservice.tooling;
 
 import com.ebsolutions.papertrail.financialdataingestionservice.config.TestConstants;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.HealthCheck;

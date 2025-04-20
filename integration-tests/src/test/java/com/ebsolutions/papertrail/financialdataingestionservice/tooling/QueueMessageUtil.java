@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataingestionservice;
+package com.ebsolutions.papertrail.financialdataingestionservice.tooling;
 
 import java.net.URI;
 import java.util.List;

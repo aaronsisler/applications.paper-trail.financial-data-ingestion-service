@@ -4,6 +4,8 @@ import com.ebsolutions.papertrail.financialdataingestionservice.config.TestConst
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransaction;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransactionFileEnvelope;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.SupportedInstitution;
+import com.ebsolutions.papertrail.financialdataingestionservice.tooling.BaseStep;
+import com.ebsolutions.papertrail.financialdataingestionservice.tooling.QueueMessageUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -91,8 +93,6 @@ public class AccountTransactionIngestionSteps extends BaseStep {
     List<Message> messages;
     Instant pollingEnd =
         Instant.now().plusMillis(TestConstants.QUEUE_POLLING_WAIT_PERIOD_IN_MILLISECONDS);
-    System.out.println("QUEuE");
-    System.out.println(queueUrl);
 
     do {
       // Wait between each polling since consumer is fast
