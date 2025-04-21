@@ -2,7 +2,7 @@
 FROM amazoncorretto:21-alpine-jdk
 
 # Copy the JAR file into the container
-ARG JAR_FILE=target/*.jar
+ARG JAR_FILE=app/target/*.jar
 
 COPY ${JAR_FILE} app.jar
 
