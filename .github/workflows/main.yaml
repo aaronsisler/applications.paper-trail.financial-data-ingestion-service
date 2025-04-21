@@ -6,7 +6,7 @@ on:
 
 jobs:
   Pull-Request-Merge:
-    name: Pull Request Merge
+    name: Publish Docker Container
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
@@ -19,6 +19,17 @@ jobs:
           distribution: "corretto"
           cache: "maven"
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
       - name: Build Application
         run: mvn clean install --activate-profiles docker --no-transfer-progress --batch-mode
 
@@ -26,3 +37,25 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Build Docker image
+        run: docker build . --tag financial-data-ingestion-service --file app/Dockerfile
+
+      - name: Get Docker Image Name
+        id: set-docker-image-tag
+        env:
+          IMAGE_NAME: financial-data-ingestion-service
+        run: |
+          echo "IMAGE_TAG=$(docker images -q $IMAGE_NAME)" >> $GITHUB_ENV
+          echo $IMAGE_TAG
+
+      - name: Tag and Publish image to Amazon ECR
+        id: tag-and-publish-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: applications.paper-trail.financial-data-ingestion-service
+        run: |
+          echo "Image Tag!"
+          echo $IMAGE_TAG
+          docker tag $IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY
