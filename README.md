@@ -47,3 +47,11 @@ awslocal sqs receive-message --endpoint-url http://sqs.us-east-1.localhost.local
 ```bash
 awslocal sqs send-message --queue-url http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/ACCOUNT_TRANSACTION_INGESTION_DATAFLOW --message-body "Hello World"
 ```
+
+```bash
+aws sqs receive-message  --queue-url https://sqs.us-east-1.amazonaws.com/654918520080/ACCOUNT_TRANSACTION_INGESTION_DATAFLOW
+```
+
+```bash
+aws sqs delete-message  --queue-url https://sqs.us-east-1.amazonaws.com/654918520080/ACCOUNT_TRANSACTION_INGESTION_DATAFLOW --receipt-handle 
+```
