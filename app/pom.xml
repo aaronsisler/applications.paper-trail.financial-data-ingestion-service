@@ -35,6 +35,13 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <!-- Used for authentication -->
+        <!-- Version: Spring Parent -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <!-- Used for validation annotations in Controller, etc. -->
         <!-- Version: Spring Parent -->
         <dependency>
