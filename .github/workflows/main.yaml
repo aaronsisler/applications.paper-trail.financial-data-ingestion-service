@@ -31,7 +31,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build Application
-        run: mvn clean package --activate-profiles docker --no-transfer-progress --batch-mode
+        run: mvn clean install --activate-profiles docker --no-transfer-progress --batch-mode
 
       - name: SonarQubeScan
         uses: SonarSource/sonarqube-scan-action@v4
