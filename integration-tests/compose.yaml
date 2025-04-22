@@ -18,8 +18,8 @@ services:
       - infrastructure
     container_name: app
     build: # "context" and "dockerfile" fields have to be under "build"
-      context: .
-      dockerfile: ../app/Dockerfile
+      context: ../
+      dockerfile: app/Dockerfile
     ports:
       - "8080:8080"
     environment:
