@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.ContainerCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsClient;
@@ -21,6 +22,14 @@ public class EventConfig {
   protected String queueUrl;
 
   @Bean
+  @Profile({"default"})
+  public SqsClient defaultSqsClient() {
+    return SqsClient.builder()
+        .credentialsProvider(ContainerCredentialsProvider.builder().build())
+        .build();
+  }
+
+  @Bean
   @Profile({"local", "dev"})
   public SqsClient localSqsClientInstantiation() {
     return SqsClient.builder()
@@ -31,7 +40,7 @@ public class EventConfig {
   }
 
   @Bean
-  @Profile({"local", "dev"})
+  @Profile({"local", "dev", "default"})
   public EventQueue eventQueue() {
     return EventQueue.builder()
         .queueUrl(queueUrl)
