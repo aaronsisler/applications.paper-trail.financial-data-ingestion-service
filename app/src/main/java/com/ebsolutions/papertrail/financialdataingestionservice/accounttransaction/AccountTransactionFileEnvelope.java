@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 @NoArgsConstructor
 public class AccountTransactionFileEnvelope {
+  private Integer accountId;
   private SupportedInstitution supportedInstitution;
   private MultipartFile file;
 }

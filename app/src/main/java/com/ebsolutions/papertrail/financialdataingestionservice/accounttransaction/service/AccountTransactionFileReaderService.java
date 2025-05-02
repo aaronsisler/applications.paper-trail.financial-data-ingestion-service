@@ -1,5 +1,6 @@
-package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
+package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.service;
 
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.AccountTransactionFileEnvelope;
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.dto.AccountTransactionDto;
 import java.io.IOException;
 import java.io.InputStreamReader;

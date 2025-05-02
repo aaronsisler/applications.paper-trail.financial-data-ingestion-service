@@ -1,6 +1,13 @@
-package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
+package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.service;
 
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.AccountTransactionFileEnvelope;
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.AccountTransactionPublisher;
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.AccountTransactionValidator;
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.ErrorMessageEnvelope;
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.dto.AccountTransactionDto;
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.exception.AccountTransactionFileException;
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.factory.AccountTransactionFileReaderFactory;
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.factory.AccountTransactionFileReaderFactoryRegistry;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransaction;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,12 +19,25 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class AccountTransactionService {
+public class AccountTransactionIngestionOrchestrationService {
+  private final AccountTransactionFileReaderFactoryRegistry factoryRegistry;
   private final AccountTransactionValidator accountTransactionValidator;
   private final AccountTransactionPublisher accountTransactionPublisher;
 
-  public void process(Integer accountId,
-                      List<? extends AccountTransactionDto> accountTransactionDtos) {
+  public void process(AccountTransactionFileEnvelope accountTransactionFileEnvelope)
+      throws Exception {
+    AccountTransactionFileReaderFactory<? extends AccountTransactionDto>
+        accountTransactionFileReaderFactory =
+        factoryRegistry.getFactory(accountTransactionFileEnvelope.getSupportedInstitution());
+
+    AccountTransactionFileReaderService<? extends AccountTransactionDto>
+        accountTransactionFileReaderService =
+        accountTransactionFileReaderFactory.create(
+            accountTransactionFileEnvelope.getSupportedInstitution());
+
+    List<? extends AccountTransactionDto> accountTransactionDtos =
+        accountTransactionFileReaderService.process(accountTransactionFileEnvelope);
+
     //    // Giving each row/DTO a row id to help with triaging data issues in file
     //    AtomicInteger atomicInteger = new AtomicInteger(0);
     //    accountTransactionDtos =
@@ -46,7 +66,7 @@ public class AccountTransactionService {
     List<AccountTransaction> accountTransactions =
         accountTransactionDtos.stream().map(accountTransactionDto ->
             AccountTransaction.builder()
-                .accountId(accountId)
+                .accountId(accountTransactionFileEnvelope.getAccountId())
                 .amount(Integer.parseInt(accountTransactionDto.getAmount()))
                 .description(accountTransactionDto.getDescription())
                 .transactionDate(LocalDate.parse(accountTransactionDto.getTransactionDate()))

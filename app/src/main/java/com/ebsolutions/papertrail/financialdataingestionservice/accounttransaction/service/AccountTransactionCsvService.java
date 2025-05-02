@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
+package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.service;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;

@@ -1,8 +1,8 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.factory;
 
-import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.AccountTransactionFileReaderService;
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.SupportedInstitution;
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.dto.AccountTransactionDto;
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.service.AccountTransactionFileReaderService;
 
 public abstract class AccountTransactionFileReaderFactory<T extends AccountTransactionDto> {
 
