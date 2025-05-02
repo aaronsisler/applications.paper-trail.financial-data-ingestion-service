@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
+package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.dto;
 
 import com.opencsv.bean.CsvBindByPosition;
 import jakarta.validation.constraints.NotBlank;
@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountTransactionDto {
-  private Integer rowId;
+public class AmexAccountTransactionDto extends AccountTransactionDto {
+  protected Integer rowId;
   @NotBlank(message = "Amount cannot be blank")
-  @CsvBindByPosition(position = 0)
-  private String amount;
+  @CsvBindByPosition(position = 4)
+  protected String amount;
   @NotBlank(message = "Description cannot be blank")
   @CsvBindByPosition(position = 1)
-  private String description;
+  protected String description;
   @NotBlank(message = "Transaction date cannot be blank")
-  @CsvBindByPosition(position = 2)
-  private String transactionDate;
+  @CsvBindByPosition(position = 0)
+  protected String transactionDate;
 }

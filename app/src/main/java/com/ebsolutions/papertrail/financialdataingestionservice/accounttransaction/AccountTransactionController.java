@@ -1,7 +1,10 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
 
-import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransactionFileEnvelope;
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.dto.AccountTransactionDto;
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.factory.AccountTransactionFileReaderFactory;
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.factory.AccountTransactionFileReaderFactoryRegistry;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -19,19 +22,23 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AccountTransactionController {
 
-  private final AccountTransactionService accountTransactionService;
+  private final AccountTransactionFileReaderFactoryRegistry factoryRegistry;
 
   @PostMapping(
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE
   )
-  public ResponseEntity<Void> loadFile(
-      @ModelAttribute @Valid AccountTransactionFileEnvelope accountTransactionFileEnvelope) {
+  public ResponseEntity<?> loadFile(
+      @ModelAttribute @Valid AccountTransactionFileEnvelope accountTransactionFileEnvelope)
+      throws Exception {
 
-    accountTransactionService.process(accountTransactionFileEnvelope);
+    AccountTransactionFileReaderFactory<? extends AccountTransactionDto> factory =
+        factoryRegistry.getFactory(accountTransactionFileEnvelope.getSupportedInstitution());
 
-    return ResponseEntity
-        .accepted()
-        .build();
+    AccountTransactionFileReaderService<? extends AccountTransactionDto> readerService =
+        factory.create(accountTransactionFileEnvelope.getSupportedInstitution());
+    List<? extends AccountTransactionDto> result =
+        readerService.process(accountTransactionFileEnvelope);
+    return ResponseEntity.ok(result);
   }
 }

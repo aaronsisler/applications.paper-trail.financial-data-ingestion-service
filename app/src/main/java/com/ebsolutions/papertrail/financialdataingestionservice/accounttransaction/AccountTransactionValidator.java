@@ -1,5 +1,6 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
 
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.dto.AccountTransactionDto;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

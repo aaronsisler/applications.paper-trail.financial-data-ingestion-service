@@ -169,16 +169,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>models-account-transaction-ingestion</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${project.parent.basedir}/contracts/inbound/account-transaction-ingestion.yaml
-                            </inputSpec>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>models-account-transaction</id>
                         <goals>
                             <goal>generate</goal>
