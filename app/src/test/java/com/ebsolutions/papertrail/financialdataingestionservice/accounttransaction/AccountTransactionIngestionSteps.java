@@ -48,14 +48,24 @@ public class AccountTransactionIngestionSteps extends BaseTest {
   private String supportedInstitution;
 
   @And("the account transaction envelope has a valid file with a valid account transaction")
-  public void theAccountTransactionEnvelopeHasAValidFileWithAValidAccountTransaction() {
+  public void theAccountTransactionEnvelopeHasAValidFileWithAValidAccountTransaction(
+      DataTable dataTable) {
+    String fileContent = dataTable.column(0).getFirst();
+
     mockMultipartFile =
         new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
-            "1450,Chipotle,2025-09-13".getBytes());
+            fileContent.getBytes());
   }
 
   @And("the account transaction envelope has a valid file with an invalid account transaction")
-  public void theAccountTransactionEnvelopeHasAValidFileWithAnInvalidAccountTransaction(
+  public void theAccountTransactionEnvelopeHasAValidFileWithAnInvalidAccountTransaction() {
+    mockMultipartFile =
+        new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
+            "14.50,Chipotle,2025-09-13".getBytes());
+  }
+
+  @And("the account transaction envelope has a valid file with a valid provided account transaction")
+  public void theAccountTransactionEnvelopeHasAValidFileWithAValidProvidedAccountTransaction(
       DataTable dataTable) {
     String fileContent = dataTable.column(0).getFirst();
 
@@ -118,9 +128,15 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     accountId = dataTable.column(0).getFirst();
   }
 
+  @And("the provided supported institution in the account transaction envelope is valid")
+  public void theProvidedSupportedInstitutionInTheAccountTransactionEnvelopeIsValid(
+      DataTable dataTable) {
+    supportedInstitution = dataTable.column(0).getFirst();
+  }
+
   @And("the supported institution in the account transaction envelope is valid")
   public void theSupportedInstitutionInTheAccountTransactionEnvelopeIsValid() {
-    supportedInstitution = SupportedInstitution.AMEX.name();
+    supportedInstitution = SupportedInstitution.MANUAL.name();
   }
 
   @And("the supported institution in the account transaction envelope is not valid")

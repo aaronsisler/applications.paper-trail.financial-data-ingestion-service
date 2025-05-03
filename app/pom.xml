@@ -246,8 +246,10 @@
                         <id>mocked-integration-tests</id>
                         <goals>
                             <goal>integration-test</goal>
+                            <goal>verify</goal>
                         </goals>
                         <configuration>
+                            <testFailureIgnore>false</testFailureIgnore>
                             <!-- This comes from the JaCoCo plugin -->
                             <argLine>${failsafeJacocoAgent}</argLine>
                             <systemPropertyVariables>
