@@ -14,7 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
-## [0.9.0] Adding in HTTPS
+## [0.11.0] Adding in the ability to pick your CSV format
+
+### Added
+
+- Adding in the two flavors for CSV that we support now, MANUAL and AMEX
+
+## [0.10.0] Adding in HTTPS
 
 ### Added
 
