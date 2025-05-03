@@ -16,7 +16,6 @@ import lombok.ToString;
 public class AmexAccountTransactionDto extends AccountTransactionDto {
   private String dateFormat = "MM/dd/yyyy";
 
-  private Integer rowId;
   @NotBlank(message = "Amount cannot be blank")
   @CsvBindByPosition(position = 4)
   private String amount;
@@ -26,9 +25,4 @@ public class AmexAccountTransactionDto extends AccountTransactionDto {
   @NotBlank(message = "Transaction date cannot be blank")
   @CsvBindByPosition(position = 0)
   private String transactionDate;
-
-  @Override
-  public void setRowId(Integer rowId) {
-    this.rowId = rowId;
-  }
 }

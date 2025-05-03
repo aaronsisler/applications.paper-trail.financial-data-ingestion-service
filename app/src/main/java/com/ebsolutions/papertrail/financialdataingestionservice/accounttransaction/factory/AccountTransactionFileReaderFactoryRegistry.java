@@ -2,24 +2,23 @@ package com.ebsolutions.papertrail.financialdataingestionservice.accounttransact
 
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.SupportedInstitution;
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.dto.AccountTransactionDto;
-import java.util.HashMap;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AccountTransactionFileReaderFactoryRegistry {
 
   private final Map<SupportedInstitution, AccountTransactionFileReaderFactory
-      <? extends AccountTransactionDto>> factories = new HashMap<>();
+      <? extends AccountTransactionDto>> factories;
 
-  @Autowired
   public AccountTransactionFileReaderFactoryRegistry(
       AmexAccountTransactionFileReaderFactory amexFactory,
       ManualAccountTransactionFileReaderFactory manualFactory
   ) {
-    factories.put(SupportedInstitution.AMEX, amexFactory);
-    factories.put(SupportedInstitution.MANUAL, manualFactory);
+    factories = Map.of(
+        SupportedInstitution.AMEX, amexFactory,
+        SupportedInstitution.MANUAL, manualFactory
+    );
   }
 
   public AccountTransactionFileReaderFactory<? extends AccountTransactionDto> getFactory(
