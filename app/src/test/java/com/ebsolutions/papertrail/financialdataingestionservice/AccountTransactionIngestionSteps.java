@@ -6,12 +6,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.AccountTransactionFileEnvelope;
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.EventQueue;
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.SupportedInstitution;
 import com.ebsolutions.papertrail.financialdataingestionservice.config.UriConstants;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransaction;
-import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransactionFileEnvelope;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.ErrorResponse;
-import com.ebsolutions.papertrail.financialdataingestionservice.model.SupportedInstitution;
 import com.ebsolutions.papertrail.financialdataingestionservice.tooling.BaseTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,14 +42,13 @@ public class AccountTransactionIngestionSteps extends BaseTest {
   private final SqsClient sqsClient;
   private final EventQueue eventQueue;
   private final ObjectMapper injectedObjectMapper;
-
+  private final String jsonAccountTransaction =
+      "{\"id\":null,\"accountId\":1,\"amount\":14.50,\"description\":\"Chipotle\",\"transactionDate\":[2025,9,13]}";
   private String requestContent;
   private MvcResult result;
   private MockMultipartFile mockMultipartFile;
   private String accountId;
   private String supportedInstitution;
-  private String jsonAccountTransaction =
-      "{\"id\":null,\"accountId\":1,\"amount\":1450,\"description\":\"Chipotle\",\"transactionDate\":[2025,9,13]}";
 
   @And("the account transaction envelope has a valid file with a valid account transaction")
   public void theAccountTransactionEnvelopeHasAValidFileWithAValidAccountTransaction() {
@@ -124,7 +123,7 @@ public class AccountTransactionIngestionSteps extends BaseTest {
 
   @And("the supported institution in the account transaction envelope is valid")
   public void theSupportedInstitutionInTheAccountTransactionEnvelopeIsValid() {
-    supportedInstitution = SupportedInstitution.AMEX.getValue();
+    supportedInstitution = SupportedInstitution.AMEX.name();
   }
 
   @And("the supported institution in the account transaction envelope is not valid")
