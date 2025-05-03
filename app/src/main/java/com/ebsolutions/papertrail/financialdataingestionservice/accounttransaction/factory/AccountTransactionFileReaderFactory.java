@@ -3,14 +3,13 @@ package com.ebsolutions.papertrail.financialdataingestionservice.accounttransact
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.SupportedInstitution;
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.dto.AccountTransactionDto;
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.service.AccountTransactionFileReaderService;
+import lombok.NonNull;
 
 public abstract class AccountTransactionFileReaderFactory<T extends AccountTransactionDto> {
 
-  public AccountTransactionFileReaderService<T> create(SupportedInstitution supportedInstitution) {
-    if (supportedInstitution == null || supportedInstitution.getDtoClass() == null) {
-      throw new IllegalArgumentException(
-          "Invalid or unsupported card type: " + supportedInstitution);
-    }
+  public AccountTransactionFileReaderService<T> create(
+      @NonNull SupportedInstitution supportedInstitution) {
+
     return new AccountTransactionFileReaderService<>(getDtoClass(supportedInstitution));
   }
 

@@ -3,6 +3,7 @@ package com.ebsolutions.papertrail.financialdataingestionservice.accounttransact
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.dto.AmexAccountTransactionDto;
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.dto.ManualAccountTransactionDto;
 import lombok.Getter;
+import lombok.NonNull;
 
 @Getter
 public enum SupportedInstitution {
@@ -13,7 +14,7 @@ public enum SupportedInstitution {
 
   private final Class<?> dtoClass;
 
-  SupportedInstitution(Class<?> dtoClass) {
+  SupportedInstitution(@NonNull Class<?> dtoClass) {
     this.dtoClass = dtoClass;
   }
 }
