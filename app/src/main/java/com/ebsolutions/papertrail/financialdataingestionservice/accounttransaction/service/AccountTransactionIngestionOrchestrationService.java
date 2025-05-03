@@ -26,8 +26,7 @@ public class AccountTransactionIngestionOrchestrationService {
   private final AccountTransactionValidator accountTransactionValidator;
   private final AccountTransactionPublisher accountTransactionPublisher;
 
-  public void process(AccountTransactionFileEnvelope accountTransactionFileEnvelope)
-      throws Exception {
+  public void process(AccountTransactionFileEnvelope accountTransactionFileEnvelope) {
     AccountTransactionFileReaderFactory<? extends AccountTransactionDto>
         accountTransactionFileReaderFactory =
         factoryRegistry.getFactory(accountTransactionFileEnvelope.getSupportedInstitution());

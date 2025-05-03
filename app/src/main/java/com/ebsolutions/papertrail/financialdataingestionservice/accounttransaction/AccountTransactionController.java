@@ -27,11 +27,9 @@ public class AccountTransactionController {
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE
   )
   public ResponseEntity<Void> loadFile(
-      @ModelAttribute @Valid AccountTransactionFileEnvelope accountTransactionFileEnvelope)
-      throws Exception {
+      @ModelAttribute @Valid AccountTransactionFileEnvelope accountTransactionFileEnvelope) {
 
     accountTransactionIngestionOrchestrationService.process(accountTransactionFileEnvelope);
-
 
     return ResponseEntity.accepted().build();
   }

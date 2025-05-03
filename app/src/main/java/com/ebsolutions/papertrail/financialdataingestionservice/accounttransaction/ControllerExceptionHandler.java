@@ -127,6 +127,8 @@ public class ControllerExceptionHandler {
       Exception exception) {
     log.error("You need to see what exception was actually thrown");
     log.error("Error", exception);
+
+    System.out.println(exception.getMessage());
     return ResponseEntity.internalServerError().body(exception);
   }
 }

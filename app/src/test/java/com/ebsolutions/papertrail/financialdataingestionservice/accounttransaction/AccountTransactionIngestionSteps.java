@@ -48,20 +48,20 @@ public class AccountTransactionIngestionSteps extends BaseTest {
   private String supportedInstitution;
 
   @And("the account transaction envelope has a valid file with a valid account transaction")
-  public void theAccountTransactionEnvelopeHasAValidFileWithAValidAccountTransaction(
+  public void theAccountTransactionEnvelopeHasAValidFileWithAValidAccountTransaction() {
+    mockMultipartFile =
+        new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
+            "1450,Chipotle,2025-09-13".getBytes());
+  }
+
+  @And("the account transaction envelope has a valid file with an invalid account transaction")
+  public void theAccountTransactionEnvelopeHasAValidFileWithAnInvalidAccountTransaction(
       DataTable dataTable) {
     String fileContent = dataTable.column(0).getFirst();
 
     mockMultipartFile =
         new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
             fileContent.getBytes());
-  }
-
-  @And("the account transaction envelope has a valid file with an invalid account transaction")
-  public void theAccountTransactionEnvelopeHasAValidFileWithAnInvalidAccountTransaction() {
-    mockMultipartFile =
-        new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
-            "14.50,Chipotle,2025-09-13".getBytes());
   }
 
   @And("the account transaction envelope has a valid file with a valid provided account transaction")
@@ -134,6 +134,11 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     supportedInstitution = dataTable.column(0).getFirst();
   }
 
+  @And("the supported institution does not match the account transaction format in the file")
+  public void theSupportedInstitutionDoesNotMatchTheAccountTransactionFormatInTheFile() {
+    supportedInstitution = SupportedInstitution.AMEX.name();
+  }
+
   @And("the supported institution in the account transaction envelope is valid")
   public void theSupportedInstitutionInTheAccountTransactionEnvelopeIsValid() {
     supportedInstitution = SupportedInstitution.MANUAL.name();
@@ -186,7 +191,6 @@ public class AccountTransactionIngestionSteps extends BaseTest {
         .filter(message -> dataTable.column(1).getFirst().equals(message)).toList();
 
     if (matchingErrorMessages.isEmpty()) {
-      System.out.println(errorResponse.getMessages());
       Assertions.fail("Error message not found: ".concat(dataTable.column(1).getFirst()));
     }
   }

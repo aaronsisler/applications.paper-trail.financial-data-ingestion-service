@@ -2,6 +2,7 @@ package com.ebsolutions.papertrail.financialdataingestionservice.accounttransact
 
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.AccountTransactionFileEnvelope;
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.dto.AccountTransactionDto;
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.exception.AccountTransactionFileException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -16,14 +17,13 @@ public class AccountTransactionFileReaderService<T extends AccountTransactionDto
     this.clazz = clazz;
   }
 
-  public List<T> process(AccountTransactionFileEnvelope accountTransactionFileEnvelope)
-      throws Exception {
+  public List<T> process(AccountTransactionFileEnvelope accountTransactionFileEnvelope) {
     if (accountTransactionFileEnvelope.getFile() == null) {
-      throw new Exception("File cannot be null");
+      throw new AccountTransactionFileException("File cannot be null");
     }
 
     if (accountTransactionFileEnvelope.getFile().isEmpty()) {
-      throw new Exception("File cannot be empty");
+      throw new AccountTransactionFileException("File cannot be empty");
     }
 
     try (Reader reader = new InputStreamReader(
@@ -31,7 +31,7 @@ public class AccountTransactionFileReaderService<T extends AccountTransactionDto
       AccountTransactionCsvService<T> accountCsvService = new AccountTransactionCsvService<>();
       return accountCsvService.processFile(reader, clazz);
     } catch (IOException e) {
-      throw new Exception("File was not able to be parsed", e);
+      throw new AccountTransactionFileException("File was not able to be parsed");
     }
   }
 }
