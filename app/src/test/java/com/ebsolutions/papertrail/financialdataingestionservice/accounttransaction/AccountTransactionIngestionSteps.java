@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataingestionservice;
+package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
@@ -6,9 +6,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.AccountTransactionFileEnvelope;
-import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.EventQueue;
-import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.SupportedInstitution;
 import com.ebsolutions.papertrail.financialdataingestionservice.config.UriConstants;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransaction;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.ErrorResponse;
@@ -193,9 +190,6 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
     String content = mockHttpServletResponse.getContentAsString();
-
-    System.out.println(content);
-
 
     Assertions.assertEquals(HttpStatus.ACCEPTED.value(), mockHttpServletResponse.getStatus());
   }
