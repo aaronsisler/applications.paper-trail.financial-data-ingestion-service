@@ -1,0 +1,14 @@
+services:
+  infrastructure:
+    container_name: infrastructure
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sqs
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      # This is called when Localstack container is starting up.
+      # Using this for AWS CLI commands currently.
+      - ./integration-tests/init-scripts/init-localstack-setup.sh:/etc/localstack/init/ready.d/script.sh
+      - ./integration-tests/init-scripts/sqs-topic-definition.json:/opt/code/localstack/sqs-topic-definition.json

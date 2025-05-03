@@ -23,11 +23,7 @@ public class AccountTransactionFileReaderFactoryRegistry {
 
   public AccountTransactionFileReaderFactory<? extends AccountTransactionDto> getFactory(
       SupportedInstitution institution) {
-    AccountTransactionFileReaderFactory<? extends AccountTransactionDto> factory =
-        factories.get(institution);
-    if (factory == null) {
-      throw new IllegalArgumentException("Unsupported institution: " + institution);
-    }
-    return factory;
+
+    return factories.get(institution);
   }
 }
