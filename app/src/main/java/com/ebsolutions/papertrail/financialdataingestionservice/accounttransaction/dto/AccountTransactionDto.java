@@ -2,11 +2,14 @@ package com.ebsolutions.papertrail.financialdataingestionservice.accounttransact
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public abstract class AccountTransactionDto {
   protected Integer rowId;
+  protected String dateFormat;
 
   public abstract String getAmount();
 

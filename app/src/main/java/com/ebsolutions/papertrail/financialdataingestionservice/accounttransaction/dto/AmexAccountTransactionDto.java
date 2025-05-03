@@ -6,22 +6,26 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class AmexAccountTransactionDto extends AccountTransactionDto {
-  protected Integer rowId;
+  private String dateFormat = "MM/dd/yyyy";
+
+  private Integer rowId;
   @NotBlank(message = "Amount cannot be blank")
   @CsvBindByPosition(position = 4)
-  protected String amount;
+  private String amount;
   @NotBlank(message = "Description cannot be blank")
   @CsvBindByPosition(position = 1)
-  protected String description;
+  private String description;
   @NotBlank(message = "Transaction date cannot be blank")
   @CsvBindByPosition(position = 0)
-  protected String transactionDate;
+  private String transactionDate;
 
   @Override
   public void setRowId(Integer rowId) {

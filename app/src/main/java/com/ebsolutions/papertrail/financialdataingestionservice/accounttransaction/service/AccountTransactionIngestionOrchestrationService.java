@@ -10,6 +10,7 @@ import com.ebsolutions.papertrail.financialdataingestionservice.accounttransacti
 import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.factory.AccountTransactionFileReaderFactoryRegistry;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransaction;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -45,10 +46,6 @@ public class AccountTransactionIngestionOrchestrationService {
       accountTransactionDto.setRowId(atomicInteger.incrementAndGet());
     }
 
-    for (AccountTransactionDto accountTransactionDto : accountTransactionDtos) {
-      System.out.println(accountTransactionDto.getRowId());
-    }
-
     // Validate each field in the Dto
     // If bad, add to the violations list
     // If any records in the violations list, send a bad request
@@ -67,13 +64,22 @@ public class AccountTransactionIngestionOrchestrationService {
         accountTransactionDtos.stream().map(accountTransactionDto ->
             AccountTransaction.builder()
                 .accountId(accountTransactionFileEnvelope.getAccountId())
-                .amount(Integer.parseInt(accountTransactionDto.getAmount()))
                 .description(accountTransactionDto.getDescription())
-                .transactionDate(LocalDate.parse(accountTransactionDto.getTransactionDate()))
+                .amount(convertToPennies(accountTransactionDto.getAmount()))
+                .transactionDate(convertToLocalDate(accountTransactionDto))
                 .build()
         ).toList();
 
     // Publish the account transactions to stream
-    //    accountTransactionPublisher.publish(accountTransactions);
+    accountTransactionPublisher.publish(accountTransactions);
+  }
+
+  private Integer convertToPennies(String withCents) {
+    return (int) (Double.parseDouble(withCents) * 100);
+  }
+
+  private LocalDate convertToLocalDate(AccountTransactionDto accountTransactionDto) {
+    return LocalDate.parse(accountTransactionDto.getTransactionDate(),
+        DateTimeFormatter.ofPattern(accountTransactionDto.getDateFormat()));
   }
 }

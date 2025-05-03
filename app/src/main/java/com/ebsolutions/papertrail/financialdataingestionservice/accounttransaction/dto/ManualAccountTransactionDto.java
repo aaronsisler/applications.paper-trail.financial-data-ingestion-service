@@ -6,12 +6,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Builder
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class ManualAccountTransactionDto extends AccountTransactionDto {
+  private String dateFormat = "yyyy-MM-dd";
+
   @NotBlank(message = "Amount cannot be blank")
   @CsvBindByPosition(position = 0)
   private String amount;

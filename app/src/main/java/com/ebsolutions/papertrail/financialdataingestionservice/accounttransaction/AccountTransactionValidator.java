@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class AccountTransactionValidator {
   public List<ErrorMessageEnvelope> validate(AccountTransactionDto accountTransactionDto) {
     try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
@@ -42,7 +44,8 @@ public class AccountTransactionValidator {
       }
 
       // Check if date is the correct format
-      if (!DateValidationUtil.validate(accountTransactionDto.getTransactionDate())) {
+      if (!DateValidationUtil.validate(accountTransactionDto.getDateFormat(),
+          accountTransactionDto.getTransactionDate())) {
         errorMessageEnvelopes.add(ErrorMessageEnvelope.builder()
             .rowId(accountTransactionDto.getRowId())
             .errorMessage("Transaction Date is not a valid format YYYY-MM-DD")
@@ -64,7 +67,7 @@ public class AccountTransactionValidator {
     }
 
     try {
-      Integer.parseInt(inputAmount);
+      Double.parseDouble(inputAmount);
       return true;
     } catch (NumberFormatException numberFormatException) {
       return false;
