@@ -14,6 +14,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class AmexAccountTransactionDto extends AccountTransactionDto {
+  private String dateFormat = "MM/dd/yyyy";
+
   @NotBlank(message = "Amount cannot be blank")
   @CsvBindByPosition(position = 4)
   private String amount;
