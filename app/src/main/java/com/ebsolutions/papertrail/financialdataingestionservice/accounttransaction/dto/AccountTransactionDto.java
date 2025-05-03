@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public abstract class AccountTransactionDto {
   protected Integer rowId;
-  protected String dateFormat;
+  protected String dateFormat = "MM/dd/yyyy";
 
   public abstract String getAmount();
 
