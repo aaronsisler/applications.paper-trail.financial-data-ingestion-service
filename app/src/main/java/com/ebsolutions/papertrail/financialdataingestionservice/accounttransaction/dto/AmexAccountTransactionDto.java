@@ -22,4 +22,9 @@ public class AmexAccountTransactionDto extends AccountTransactionDto {
   @NotBlank(message = "Transaction date cannot be blank")
   @CsvBindByPosition(position = 0)
   protected String transactionDate;
+
+  @Override
+  public void setRowId(Integer rowId) {
+    this.rowId = rowId;
+  }
 }

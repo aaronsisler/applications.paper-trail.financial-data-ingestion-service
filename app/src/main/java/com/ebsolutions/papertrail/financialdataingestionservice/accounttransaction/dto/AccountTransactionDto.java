@@ -1,7 +1,12 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public abstract class AccountTransactionDto {
-  public abstract Integer getRowId();
+  protected Integer rowId;
 
   public abstract String getAmount();
 

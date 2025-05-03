@@ -12,6 +12,7 @@ import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTra
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,16 +39,15 @@ public class AccountTransactionIngestionOrchestrationService {
     List<? extends AccountTransactionDto> accountTransactionDtos =
         accountTransactionFileReaderService.process(accountTransactionFileEnvelope);
 
-    //    // Giving each row/DTO a row id to help with triaging data issues in file
-    //    AtomicInteger atomicInteger = new AtomicInteger(0);
-    //    accountTransactionDtos =
-    //        accountTransactionDtos.stream().map(accountTransactionDto ->
-    //            AccountTransactionDto.builder()
-    //                .rowId(atomicInteger.incrementAndGet())
-    //                .amount(accountTransactionDto.getAmount())
-    //                .description(accountTransactionDto.getDescription())
-    //                .transactionDate(accountTransactionDto.getTransactionDate())
-    //                .build()).toList();
+    // Giving each row/DTO a row id to help with triaging data issues in file
+    AtomicInteger atomicInteger = new AtomicInteger(0);
+    for (AccountTransactionDto accountTransactionDto : accountTransactionDtos) {
+      accountTransactionDto.setRowId(atomicInteger.incrementAndGet());
+    }
+
+    for (AccountTransactionDto accountTransactionDto : accountTransactionDtos) {
+      System.out.println(accountTransactionDto.getRowId());
+    }
 
     // Validate each field in the Dto
     // If bad, add to the violations list
@@ -74,6 +74,6 @@ public class AccountTransactionIngestionOrchestrationService {
         ).toList();
 
     // Publish the account transactions to stream
-    accountTransactionPublisher.publish(accountTransactions);
+    //    accountTransactionPublisher.publish(accountTransactions);
   }
 }

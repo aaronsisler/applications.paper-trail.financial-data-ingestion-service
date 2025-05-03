@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ManualAccountTransactionDto extends AccountTransactionDto {
-  private Integer rowId;
   @NotBlank(message = "Amount cannot be blank")
   @CsvBindByPosition(position = 0)
   private String amount;
