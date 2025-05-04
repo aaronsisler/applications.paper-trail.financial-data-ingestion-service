@@ -9,17 +9,21 @@ public class ManualAccountTransactionFileReaderFactoryTest {
   @Test
   void amexFactoryThrowsExceptionOnNullInput() {
     assertThrows(IllegalArgumentException.class, () -> {
+
       ManualAccountTransactionFileReaderFactory factory =
           new ManualAccountTransactionFileReaderFactory();
+
       factory.getDtoClass(null);
     });
   }
 
   @Test
-  void amexFactoryThrowsExceptionOnIncorretInput() {
+  void amexFactoryThrowsExceptionOnIncorrectInput() {
     assertThrows(IllegalArgumentException.class, () -> {
+
       ManualAccountTransactionFileReaderFactory factory =
           new ManualAccountTransactionFileReaderFactory();
+
       factory.getDtoClass(SupportedInstitution.AMEX);
     });
   }
