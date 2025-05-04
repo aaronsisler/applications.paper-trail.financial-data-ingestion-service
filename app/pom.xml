@@ -192,7 +192,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine>${surefireJacocoAgent}</argLine>
+                    <argLine>${surefire.jacoco.args}</argLine>
                 </configuration>
             </plugin>
             <!-- Used to run agent that collects code coverage -->
@@ -221,7 +221,7 @@
                         </goals>
                         <configuration>
                             <destFile>${project.build.directory}/jacoco-output/jacoco-unit-tests.exec</destFile>
-                            <propertyName>surefireJacocoAgent</propertyName>
+                            <propertyName>surefire.jacoco.args</propertyName>
                         </configuration>
                     </execution>
                     <execution>
@@ -243,7 +243,7 @@
                         </goals>
                         <configuration>
                             <destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
-                            <propertyName>failsafeJacocoAgent</propertyName>
+                            <propertyName>failsafe.jacoco.args</propertyName>
                         </configuration>
                     </execution>
                     <execution>
@@ -303,7 +303,7 @@
                         <configuration>
                             <testFailureIgnore>false</testFailureIgnore>
                             <!-- This comes from the JaCoCo plugin -->
-                            <argLine>${failsafeJacocoAgent}</argLine>
+                            <argLine>${failsafe.jacoco.args}</argLine>
                             <systemPropertyVariables>
                                 <!-- This triggers the correct config and keeps the H2 DB from spinning up -->
                                 <spring.profiles.active>mocked</spring.profiles.active>
