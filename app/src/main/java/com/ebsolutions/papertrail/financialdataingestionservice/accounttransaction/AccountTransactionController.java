@@ -1,6 +1,6 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
 
-import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransactionFileEnvelope;
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.service.AccountTransactionIngestionOrchestrationService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AccountTransactionController {
 
-  private final AccountTransactionService accountTransactionService;
+  private final AccountTransactionIngestionOrchestrationService
+      accountTransactionIngestionOrchestrationService;
 
   @PostMapping(
       produces = MediaType.APPLICATION_JSON_VALUE,
@@ -28,10 +29,8 @@ public class AccountTransactionController {
   public ResponseEntity<Void> loadFile(
       @ModelAttribute @Valid AccountTransactionFileEnvelope accountTransactionFileEnvelope) {
 
-    accountTransactionService.process(accountTransactionFileEnvelope);
+    accountTransactionIngestionOrchestrationService.process(accountTransactionFileEnvelope);
 
-    return ResponseEntity
-        .accepted()
-        .build();
+    return ResponseEntity.accepted().build();
   }
 }

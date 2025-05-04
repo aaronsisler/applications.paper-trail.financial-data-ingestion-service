@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataingestionservice;
+package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
@@ -6,12 +6,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.EventQueue;
 import com.ebsolutions.papertrail.financialdataingestionservice.config.UriConstants;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransaction;
-import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransactionFileEnvelope;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.ErrorResponse;
-import com.ebsolutions.papertrail.financialdataingestionservice.model.SupportedInstitution;
 import com.ebsolutions.papertrail.financialdataingestionservice.tooling.BaseTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,14 +39,13 @@ public class AccountTransactionIngestionSteps extends BaseTest {
   private final SqsClient sqsClient;
   private final EventQueue eventQueue;
   private final ObjectMapper injectedObjectMapper;
-
+  private final String jsonAccountTransaction =
+      "{\"id\":null,\"accountId\":1,\"amount\":14.50,\"description\":\"Chipotle\",\"transactionDate\":[2025,9,13]}";
   private String requestContent;
   private MvcResult result;
   private MockMultipartFile mockMultipartFile;
   private String accountId;
   private String supportedInstitution;
-  private String jsonAccountTransaction =
-      "{\"id\":null,\"accountId\":1,\"amount\":1450,\"description\":\"Chipotle\",\"transactionDate\":[2025,9,13]}";
 
   @And("the account transaction envelope has a valid file with a valid account transaction")
   public void theAccountTransactionEnvelopeHasAValidFileWithAValidAccountTransaction() {
@@ -60,6 +56,16 @@ public class AccountTransactionIngestionSteps extends BaseTest {
 
   @And("the account transaction envelope has a valid file with an invalid account transaction")
   public void theAccountTransactionEnvelopeHasAValidFileWithAnInvalidAccountTransaction(
+      DataTable dataTable) {
+    String fileContent = dataTable.column(0).getFirst();
+
+    mockMultipartFile =
+        new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
+            fileContent.getBytes());
+  }
+
+  @And("the account transaction envelope has a valid file with a valid provided account transaction")
+  public void theAccountTransactionEnvelopeHasAValidFileWithAValidProvidedAccountTransaction(
       DataTable dataTable) {
     String fileContent = dataTable.column(0).getFirst();
 
@@ -122,9 +128,20 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     accountId = dataTable.column(0).getFirst();
   }
 
+  @And("the provided supported institution in the account transaction envelope is valid")
+  public void theProvidedSupportedInstitutionInTheAccountTransactionEnvelopeIsValid(
+      DataTable dataTable) {
+    supportedInstitution = dataTable.column(0).getFirst();
+  }
+
+  @And("the supported institution does not match the account transaction format in the file")
+  public void theSupportedInstitutionDoesNotMatchTheAccountTransactionFormatInTheFile() {
+    supportedInstitution = SupportedInstitution.AMEX.name();
+  }
+
   @And("the supported institution in the account transaction envelope is valid")
   public void theSupportedInstitutionInTheAccountTransactionEnvelopeIsValid() {
-    supportedInstitution = SupportedInstitution.AMEX.getValue();
+    supportedInstitution = SupportedInstitution.MANUAL.name();
   }
 
   @And("the supported institution in the account transaction envelope is not valid")
@@ -174,7 +191,6 @@ public class AccountTransactionIngestionSteps extends BaseTest {
         .filter(message -> dataTable.column(1).getFirst().equals(message)).toList();
 
     if (matchingErrorMessages.isEmpty()) {
-      System.out.println(errorResponse.getMessages());
       Assertions.fail("Error message not found: ".concat(dataTable.column(1).getFirst()));
     }
   }
@@ -194,9 +210,6 @@ public class AccountTransactionIngestionSteps extends BaseTest {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
     String content = mockHttpServletResponse.getContentAsString();
-
-    System.out.println(content);
-
 
     Assertions.assertEquals(HttpStatus.ACCEPTED.value(), mockHttpServletResponse.getStatus());
   }

@@ -41,7 +41,7 @@ public class AccountTransactionIngestionSteps extends BaseStep {
         new MockMultipartFile("file",
             "test.txt",
             MediaType.TEXT_PLAIN_VALUE,
-            "1450,Chipotle,2025-09-13".getBytes()
+            "14.50,Chipotle,2025-09-13".getBytes()
         );
   }
 
@@ -52,7 +52,7 @@ public class AccountTransactionIngestionSteps extends BaseStep {
 
   @And("the supported institution in the account transaction envelope is valid")
   public void theSupportedInstitutionInTheAccountTransactionEnvelopeIsValid() {
-    supportedInstitution = SupportedInstitution.AMEX.getValue();
+    supportedInstitution = SupportedInstitution.MANUAL.getValue();
   }
 
   @When("the ingest account transactions endpoint is invoked")

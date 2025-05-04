@@ -1,15 +1,22 @@
 Feature: Account Transaction: Ingestion
 
-  Scenario: Account transaction is valid returns correct response
+  Scenario Outline: Account transaction is valid returns correct response
     Given application is up
-    And the account transaction envelope has a valid file with a valid account transaction
+    And the provided supported institution in the account transaction envelope is valid
+      | <supportedInstitution> |
+    And the account transaction envelope has a valid file with a valid provided account transaction
+      | <accountTransaction> |
     And the account id in the account transaction envelope is valid
-    And the supported institution in the account transaction envelope is valid
     And the correct queue is provided
     And the message succeeds to parse into a string for the queue
     When the ingest account transactions endpoint is invoked
     Then the correct accepted response is returned from the ingest transactions endpoint
     And the account transactions are published to the queue
+
+    Examples:
+      | supportedInstitution | accountTransaction                                          |
+      | AMEX                 | 03/26/2025,RENEWAL MEMBERSHIP FEE,AARON SISLER,-61004,95.00 |
+      | MANUAL               | 14.50,Chipotle,2025-09-13                                   |
 
   Scenario Outline: Account transaction fails to publish to queue
     Given application is up
@@ -26,7 +33,7 @@ Feature: Account Transaction: Ingestion
     Examples:
       | statusCode | responseMessage                          |
       | 500        | Something went wrong publishing to queue |
-
+#
   Scenario Outline: Account transaction fails to be parsed for the queue
     Given application is up
     And the account transaction envelope has a valid file with a valid account transaction
@@ -62,7 +69,7 @@ Feature: Account Transaction: Ingestion
       | 123,Valid_Description,ABC        | 400        | Row 1 :: Transaction Date is not a valid format YYYY-MM-DD |
       | 123,Valid_Description,2025-13-25 | 400        | Row 1 :: Transaction Date is not a valid format YYYY-MM-DD |
       | 123,Valid_Description,2025-04-32 | 400        | Row 1 :: Transaction Date is not a valid format YYYY-MM-DD |
-
+#
   Scenario Outline: Institution is not valid returns correct error
     Given application is up
     And the account transaction envelope has a valid file with a valid account transaction
@@ -75,6 +82,19 @@ Feature: Account Transaction: Ingestion
     Examples:
       | statusCode | responseMessage                                     |
       | 400        | Invalid argument: supportedInstitution :: NOT_VALID |
+
+  Scenario Outline: Institution does not match with file returns correct error
+    Given application is up
+    And the account transaction envelope has a valid file with a valid account transaction
+    And the account id in the account transaction envelope is valid
+    And the supported institution does not match the account transaction format in the file
+    When the ingest account transactions endpoint is invoked
+    Then the correct bad request response is returned from the ingest transactions endpoint
+      | <statusCode> | <responseMessage> |
+
+    Examples:
+      | statusCode | responseMessage                 |
+      | 400        | Row 1 :: Amount cannot be blank |
 
   Scenario Outline: Account Id is not valid returns correct error
     Given application is up
@@ -91,7 +111,7 @@ Feature: Account Transaction: Ingestion
       | -1        | 400        | Invalid argument: accountId :: -1   |
       | 0         | 400        | Invalid argument: accountId :: 0    |
       |           | 400        | Invalid argument: accountId :: null |
-
+#
   Scenario Outline: File is null returns correct error
     Given application is up
     And the account transaction envelope in the request body has a null file
@@ -102,7 +122,7 @@ Feature: Account Transaction: Ingestion
     Examples:
       | statusCode | responseMessage             |
       | 400        | Media type is not supported |
-
+#
   Scenario Outline: File is empty returns correct error
     Given application is up
     And the account id in the account transaction envelope is valid

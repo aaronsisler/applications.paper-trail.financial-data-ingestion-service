@@ -1,5 +1,6 @@
-package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
+package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.exception;
 
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.ErrorMessageEnvelope;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;

@@ -11,11 +11,7 @@ components:
       type: string
       enum:
         - AMEX
-        - CHASE
-        - CITI
-        - COASTAL
-        - DISCOVER
-        - SECU
+        - MANUAL
     AccountTransactionFileEnvelope:
       type: object
       required:

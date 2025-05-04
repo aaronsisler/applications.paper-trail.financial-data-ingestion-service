@@ -1,5 +1,6 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
 
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.exception.AccountTransactionPublishException;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.AccountTransaction;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

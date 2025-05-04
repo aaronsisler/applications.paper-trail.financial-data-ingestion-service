@@ -169,16 +169,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>models-account-transaction-ingestion</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${project.parent.basedir}/contracts/inbound/account-transaction-ingestion.yaml
-                            </inputSpec>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>models-account-transaction</id>
                         <goals>
                             <goal>generate</goal>
@@ -201,9 +191,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
+                <!--                <configuration>-->
+                <!--                    <skipTests>true</skipTests>-->
+                <!--                </configuration>-->
             </plugin>
             <!-- Used to run agent that collects code coverage -->
             <!-- Version: Parent POM PIM -->
@@ -256,8 +246,10 @@
                         <id>mocked-integration-tests</id>
                         <goals>
                             <goal>integration-test</goal>
+                            <goal>verify</goal>
                         </goals>
                         <configuration>
+                            <testFailureIgnore>false</testFailureIgnore>
                             <!-- This comes from the JaCoCo plugin -->
                             <argLine>${failsafeJacocoAgent}</argLine>
                             <systemPropertyVariables>

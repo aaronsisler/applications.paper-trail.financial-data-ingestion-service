@@ -1,5 +1,7 @@
 package com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction;
 
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.exception.AccountTransactionFileException;
+import com.ebsolutions.papertrail.financialdataingestionservice.accounttransaction.exception.AccountTransactionPublishException;
 import com.ebsolutions.papertrail.financialdataingestionservice.model.ErrorResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -125,6 +127,7 @@ public class ControllerExceptionHandler {
       Exception exception) {
     log.error("You need to see what exception was actually thrown");
     log.error("Error", exception);
+
     return ResponseEntity.internalServerError().body(exception);
   }
 }
