@@ -11,3 +11,6 @@ target/
 
 # System files
 .DS_Store
+
+# Secrets files
+application-local.yaml

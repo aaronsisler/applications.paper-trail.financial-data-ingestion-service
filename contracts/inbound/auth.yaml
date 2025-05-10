@@ -1,0 +1,38 @@
+openapi: "3.0.2"
+info:
+  title: Actuator API
+  version: "1.0"
+servers:
+  - url: http://localhost/
+paths:
+  /auth/grant-code:
+    get:
+      operationId: authGrantCodeGET
+      responses:
+        "200":
+          description: Retrieves a user's information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: "opaque string"
+        lastName:
+          type: string
+          example: "Sisler"
+        firstName:
+          type: string
+          example: "Financial Data Provider Service"
+        email:
+          type: string
+          example: "aaron.sisler@eandbsolutions.com"
+        picture:
+          type: string
+          example: "https://lh3.googleusercontent.com/a/ACg8ocJEQqg8n9gWsRh5nYVLXjtXclu_OErDzz2mENL8t05Fgz49MeQ2=s96-c"
+

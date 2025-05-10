@@ -2,7 +2,11 @@
 
 ## TODOs
 
-- Have a way to check what the status of the Sonar run was to block the PR
+- User details returned to the UI
+- How do we store and resend the same access_token from the UI
+- What is the process for calling the service with a access_token
+- What is the process for checking if access token is valid
+- What is the process for caching the access token so we don't have to validate each time
 
 ## Definition of Done
 

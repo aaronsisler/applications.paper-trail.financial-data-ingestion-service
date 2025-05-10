@@ -9,6 +9,11 @@ management:
     env:
       enabled: true
 
+authentication:
+  provider-url: https://oauth2.googleapis.com/token
+  authenticated-user-info-url: https://www.googleapis.com/oauth2/v2/userinfo
+  client-id: 493888060498-vu55rlcj4p0sqbf1cpnr2k4am52r72qf.apps.googleusercontent.com
+
 # Everything above these dashes will be applied to all profiles
 ---
 
@@ -18,7 +23,7 @@ spring:
       on-profile: local
 
 server:
-  port: 8081
+  port: 8080
 
 infrastructure:
   endpoint: http://sqs.us-east-1.localhost.localstack.cloud:4566

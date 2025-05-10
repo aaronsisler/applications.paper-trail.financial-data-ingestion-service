@@ -169,6 +169,15 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>models-auth</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.parent.basedir}/contracts/inbound/auth.yaml</inputSpec>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>models-account-transaction</id>
                         <goals>
                             <goal>generate</goal>
